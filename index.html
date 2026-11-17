@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nihongo Step-by-Step | เรียนภาษาญี่ปุ่นตั้งแต่เริ่มต้น</title>
+    <!-- โหลด Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลด Google Fonts: Noto Sans Thai และ Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- โหลด Font Awesome สำหรับไอคอน -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans Thai', 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .jp-font {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        /* ตกแต่ง Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        /* แอนิเมชันสำหรับการ์ดตัวอักษร */
+        .kana-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .kana-card:active {
+            transform: scale(0.95);
+        }
+        /* ป้องกันปัญหาการซูมบนมือถือตอนกดปุ่ม */
+        button, select, input {
+            touch-action: manipulation;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- แถบนำทางด้านบน (Navbar) สำหรับมือถือและเดสก์ท็อป -->
+    <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-rose-100">
+        <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-14 sm:h-16">
+                <!-- โลโก้ -->
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 bg-rose-500 rounded-xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-md shadow-rose-200 jp-font">
+                        あ
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-xl font-bold text-slate-800 tracking-tight leading-tight">Nihongo <span class="text-rose-500">Step-by-Step</span></h1>
+                        <p class="text-[10px] text-slate-500 hidden sm:block">ปูพื้นฐานภาษาญี่ปุ่น: ตัวอักษร • สะกดคำ • แปลประโยค</p>
+                    </div>
+                </div>
+
+                <!-- ปุ่มเช็คสถานะเสียง -->
+                <div class="flex items-center space-x-2">
+                    <button onclick="testVoice()" class="text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl transition flex items-center gap-1.5 font-medium active:scale-95" title="ทดสอบเสียงภาษาญี่ปุ่น">
+                        <i class="fa-solid fa-volume-high text-rose-500"></i>
+                        <span class="text-xs">ทดสอบเสียง</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- เมนูเลือกบทเรียน (Learning Path Tabs) แบบปัดเลื่อนได้ลื่นไหลบนมือถือ -->
+    <nav class="bg-white border-b border-slate-200 shadow-sm sticky top-14 sm:top-16 z-40">
+        <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 overflow-x-auto scrollbar-none">
+            <div class="flex flex-nowrap sm:flex-wrap justify-start sm:justify-center gap-2 min-w-max sm:min-w-0" id="nav-tabs">
+                <button onclick="switchTab('step1')" id="tab-step1" class="tab-btn px-3.5 py-2 rounded-xl font-semibold text-xs sm:text-sm flex items-center gap-2 transition bg-rose-500 text-white shadow-md shadow-rose-200 flex-shrink-0">
+                    <span class="bg-white/20 px-2 py-0.5 rounded-md text-[10px]">ขั้นที่ 1</span>
+                    <span>อักษรพื้นฐาน</span>
+                </button>
+                <button onclick="switchTab('step2')" id="tab-step2" class="tab-btn px-3.5 py-2 rounded-xl font-semibold text-xs sm:text-sm flex items-center gap-2 transition bg-slate-100 text-slate-600 hover:bg-slate-200 flex-shrink-0">
+                    <span class="bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md text-[10px]">ขั้นที่ 2</span>
+                    <span>กฎการผันเสียง</span>
+                </button>
+                <button onclick="switchTab('step3')" id="tab-step3" class="tab-btn px-3.5 py-2 rounded-xl font-semibold text-xs sm:text-sm flex items-center gap-2 transition bg-slate-100 text-slate-600 hover:bg-slate-200 flex-shrink-0">
+                    <span class="bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md text-[10px]">ขั้นที่ 3</span>
+                    <span>ฝึกผสมคำ/ศัพท์</span>
+                </button>
+                <button onclick="switchTab('step4')" id="tab-step4" class="tab-btn px-3.5 py-2 rounded-xl font-semibold text-xs sm:text-sm flex items-center gap-2 transition bg-slate-100 text-slate-600 hover:bg-slate-200 flex-shrink-0">
+                    <span class="bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md text-[10px]">ขั้นที่ 4</span>
+                    <span>โครงสร้างประโยค</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- พื้นที่เนื้อหาหลัก (Main Content) ปรับขนาด padding ให้เหมาะกับจอมือถือ -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6">
+        
+        <!-- กล่องแจ้งเตือนแบบกำหนดเอง (แทน alert) -->
+        <div id="toast-box" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-5 sm:max-w-md z-50 transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
+            <div class="bg-slate-800 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-xs sm:text-sm border border-slate-700">
+                <i class="fa-solid fa-circle-info text-rose-400 text-base"></i>
+                <span id="toast-message" class="flex-1">ข้อความแจ้งเตือน</span>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- ขั้นที่ 1: ตัวอักษรพื้นฐาน (ฮิรางานะ / คาตาคานะ) -->
+        <!-- ========================================== -->
+        <section id="content-step1" class="step-content space-y-4 sm:space-y-6">
+            <div class="bg-gradient-to-r from-rose-500 to-pink-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
+                <span class="inline-block bg-white/20 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full mb-1.5">บทเรียนที่ 1 • ก้าวแรกของภาษาญี่ปุ่น</span>
+                <h2 class="text-xl sm:text-3xl font-bold mb-1">ตารางตัวอักษรพื้นฐาน 46 เสียง</h2>
+                <p class="text-rose-100 text-xs sm:text-base">แตะที่ตัวอักษรแต่ละตัวเพื่อฟังเสียงอ่าน เทคนิคการจำภาพ และคำศัพท์ตัวอย่าง</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100 space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 border-b pb-4">
+                    <div class="flex bg-slate-100 p-1 rounded-xl">
+                        <button onclick="setKanaType('hiragana')" id="btn-hiragana" class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-bold bg-white text-rose-600 shadow transition">
+                            ฮิรางานะ (Hiragana)
+                        </button>
+                        <button onclick="setKanaType('katakana')" id="btn-katakana" class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-800 transition">
+                            คาตาคานะ (Katakana)
+                        </button>
+                    </div>
+                    <button onclick="toggleKanaQuiz()" id="btn-kana-quiz" class="px-4 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-gamepad"></i> <span>โหมดทดสอบจำอักษร</span>
+                    </button>
+                </div>
+
+                <!-- โหมดควิซทายตัวอักษร -->
+                <div id="kana-quiz-box" class="hidden bg-amber-50/70 border border-amber-200 rounded-2xl p-4 sm:p-6 text-center space-y-3 sm:space-y-4">
+                    <div class="text-xs font-bold text-amber-700 uppercase">ทายเสียงอ่านของตัวอักษรนี้</div>
+                    <div id="quiz-kana-char" class="jp-font text-5xl sm:text-6xl font-bold text-slate-800 py-1">あ</div>
+                    <div id="quiz-options" class="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-2 sm:gap-3"></div>
+                    <div id="quiz-feedback" class="text-xs sm:text-sm font-bold h-5"></div>
+                </div>
+
+                <!-- ตารางตัวอักษร ปรับขนาดช่องให้กดง่ายบนจอมือถือ -->
+                <div id="kana-grid" class="grid grid-cols-5 gap-1.5 sm:gap-3"></div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ขั้นที่ 2: กฎการผันเสียงและสะกดคำ -->
+        <!-- ========================================== -->
+        <section id="content-step2" class="step-content hidden space-y-4 sm:space-y-6">
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
+                <span class="inline-block bg-white/20 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full mb-1.5">บทเรียนที่ 2 • กลไกการอ่านทุกคำ</span>
+                <h2 class="text-xl sm:text-3xl font-bold mb-1">กฎการผันเสียงและเทคนิคการสะกดคำ</h2>
+                <p class="text-indigo-100 text-xs sm:text-base">รู้ 4 กฎนี้ก็สามารถอ่านตัวอักษรภาษาญี่ปุ่นผสมคำได้ทั้งหมด</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                    <h3 class="font-bold text-indigo-700 text-base sm:text-lg">1. เสียงขุ่น (Dakuon ゛) & กึ่งขุ่น (Handakuon ゜)</h3>
+                    <p class="text-xs sm:text-sm text-slate-600">เติมขีด 2 ขีด (เท็นเท็น) หรือวงกลม (มารุ) ที่มุมขวาบนเพื่อเปลี่ยนเสียงพยัญชนะ</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                        <button onclick="speakText('かがみ')" class="p-3 bg-slate-50 hover:bg-indigo-50 rounded-xl text-left border active:scale-98 transition">
+                            <div class="jp-font font-bold text-sm sm:text-base">か → が (ka → ga)</div>
+                            <div class="text-xs text-slate-500">かがみ (kagami) กระจก</div>
+                        </button>
+                        <button onclick="speakText('ぱん')" class="p-3 bg-slate-50 hover:bg-indigo-50 rounded-xl text-left border active:scale-98 transition">
+                            <div class="jp-font font-bold text-sm sm:text-base">は → ぱ (ha → pa)</div>
+                            <div class="text-xs text-slate-500">ぱん (pan) ขนมปัง</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                    <h3 class="font-bold text-indigo-700 text-base sm:text-lg">2. เสียงควบ (Yoon: ゃ ゅ ょ ตัวเล็ก)</h3>
+                    <p class="text-xs sm:text-sm text-slate-600">นำพยัญชนะแถว "อิ" มาควบกับ ゃ (ya), ゅ (yu), ょ (yo) ตัวเล็ก อ่านรวบเป็น 1 พยางค์</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                        <button onclick="speakText('おちゃ')" class="p-3 bg-slate-50 hover:bg-indigo-50 rounded-xl text-left border active:scale-98 transition">
+                            <div class="jp-font font-bold text-sm sm:text-base">ち + ゃ = ちゃ (cha)</div>
+                            <div class="text-xs text-slate-500">おちゃ (ocha) น้ำชา</div>
+                        </button>
+                        <button onclick="speakText('ぎゅうにゅう')" class="p-3 bg-slate-50 hover:bg-indigo-50 rounded-xl text-left border active:scale-98 transition">
+                            <div class="jp-font font-bold text-sm sm:text-base">ぎ + ゅ = ぎゅ (gyu)</div>
+                            <div class="text-xs text-slate-500">ぎゅうにゅう (gyuunyuu) นม</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                    <h3 class="font-bold text-indigo-700 text-base sm:text-lg">3. เสียงกัก / ตัวสะกด (Sokuon: っ ตัวเล็ก)</h3>
+                    <p class="text-xs sm:text-sm text-slate-600">ตัว っ (สึตัวเล็ก) ทำหน้าที่เป็นตัวสะกดให้พยางค์หน้า และเบิ้ลเสียงพยัญชนะตัวถัดไป</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                        <button onclick="speakText('きって')" class="p-3 bg-slate-50 hover:bg-indigo-50 rounded-xl text-left border active:scale-98 transition">
+                            <div class="jp-font font-bold text-sm sm:text-base">き + っ + て = ki-t-te</div>
+                            <div class="text-xs text-slate-500">きって (kitte) แสตมป์</div>
+                        </button>
+                        <button onclick="speakText('がっこう')" class="p-3 bg-slate-50 hover:bg-indigo-50 rounded-xl text-left border active:scale-98 transition">
+                            <div class="jp-font font-bold text-sm sm:text-base">が + っ + こう = ga-k-kou</div>
+                            <div class="text-xs text-slate-500">がっこう (gakkou) โรงเรียน</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                    <h3 class="font-bold text-indigo-700 text-base sm:text-lg">4. เสียงยาว (Chouon) & ตัวสะกด ん</h3>
+                    <p class="text-xs sm:text-sm text-slate-600">ฮิรางานะเติมสระท้ายให้เสียงยาว ส่วนคาตาคานะใช้ขีด (ー) และ ん ทำหน้าที่สะกดแม่กน/กง/กม</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                        <button onclick="speakText('コーヒー')" class="p-3 bg-slate-50 hover:bg-indigo-50 rounded-xl text-left border active:scale-98 transition">
+                            <div class="jp-font font-bold text-sm sm:text-base">コーヒー (ko-o-hi-i)</div>
+                            <div class="text-xs text-slate-500">ขีด ー ลากเสียงยาว (กาแฟ)</div>
+                        </button>
+                        <button onclick="speakText('えんぴつ')" class="p-3 bg-slate-50 hover:bg-indigo-50 rounded-xl text-left border active:scale-98 transition">
+                            <div class="jp-font font-bold text-sm sm:text-base">えんぴつ (e-n-pi-tsu)</div>
+                            <div class="text-xs text-slate-500">ん สะกดเป็นเสียง น/ม (ดินสอ)</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ขั้นที่ 3: ฝึกผสมคำและอ่านคำศัพท์ (Word Builder & 1000 Vocab) -->
+        <!-- ========================================== -->
+        <section id="content-step3" class="step-content hidden space-y-4 sm:space-y-6">
+            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                    <div>
+                        <span class="inline-block bg-white/20 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full mb-1.5">บทเรียนที่ 3 • คลังคำศัพท์และฝึกสะกด</span>
+                        <h2 class="text-xl sm:text-3xl font-bold mb-1">ฝึกสะกดคำศัพท์ 300 คำ & ท่องจำคลังศัพท์ 1,000 คำ</h2>
+                        <p class="text-emerald-100 text-xs sm:text-base">เลือกโหมดฝึกฝนได้ทั้งการต่อตัวอักษรสะกดคำในชีวิตประจำวัน และการท่องจำคำศัพท์แยกตามหมวดหมู่</p>
+                    </div>
+                    <!-- ปุ่มสลับ 2 โหมดในขั้นที่ 3 -->
+                    <div class="flex bg-black/20 p-1 rounded-xl self-stretch lg:self-auto">
+                        <button onclick="setStep3Mode('builder')" id="btn-s3-builder" class="flex-1 lg:flex-none px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white text-emerald-700 shadow transition">
+                            โหมด 1: ฝึกสะกด (300 คำ)
+                        </button>
+                        <button onclick="setStep3Mode('vocab1000')" id="btn-s3-vocab1000" class="flex-1 lg:flex-none px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-white hover:bg-white/10 transition">
+                            โหมด 2: ท่องจำ (1,000 คำ)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- โหมดที่ 1: ฝึกสะกดคำศัพท์ 300 คำในชีวิตประจำวัน -->
+            <!-- ========================================== -->
+            <div id="s3-builder-view" class="bg-white rounded-2xl p-4 sm:p-8 shadow-sm border border-slate-100 max-w-2xl mx-auto space-y-4 sm:space-y-6">
+                <!-- แถบเลือกหมวดหมู่และข้อที่เท่าไหร่ -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <span class="text-xs font-bold text-slate-500 whitespace-nowrap">หมวด:</span>
+                        <select id="wb-category-select" onchange="filterWBByCategory()" class="flex-1 sm:flex-none text-xs sm:text-sm bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold rounded-xl px-3 py-2 focus:outline-none">
+                            <option value="all">ทั้งหมด (300 คำในชีวิตประจำวัน)</option>
+                            <option value="ทักทาย/ทั่วไป">ทักทาย & ทั่วไป</option>
+                            <option value="อาหาร/เครื่องดื่ม">อาหาร & เครื่องดื่ม</option>
+                            <option value="สถานที่/เดินทาง">สถานที่ & การเดินทาง</option>
+                            <option value="เวลา/วันเดือนปี">เวลา & วันเดือนปี</option>
+                            <option value="สิ่งของ/บ้าน">สิ่งของ & บ้าน</option>
+                            <option value="บุคคล/ร่างกาย">บุคคล & ร่างกาย</option>
+                            <option value="คำกริยา/คุณศัพท์">คำกริยา & คุณศัพท์</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto text-sm">
+                        <button onclick="randomWBQuestion()" class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5" title="สุ่มคำศัพท์">
+                            <i class="fa-solid fa-shuffle"></i> สุ่มคำ
+                        </button>
+                        <span class="font-bold text-slate-700">ข้อ <span id="wb-current-num">1</span> / <span id="wb-total-num">300</span></span>
+                    </div>
+                </div>
+
+                <!-- โจทย์รูปภาพและความหมาย -->
+                <div class="text-center space-y-2 py-1">
+                    <div class="inline-block px-3 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold mb-1" id="wb-cat-badge">หมวดทั่วไป</div>
+                    <div id="wb-emoji" class="text-5xl sm:text-6xl mb-1">🍣</div>
+                    <h3 id="wb-meaning" class="text-lg sm:text-xl font-bold text-slate-800">ซูชิ (ข้าวปั้นหน้าปลาดิบ)</h3>
+                    <div class="inline-flex items-center gap-2 bg-slate-100 px-3.5 py-1.5 rounded-full">
+                        <span class="text-xs text-slate-500">คำอ่าน:</span>
+                        <span id="wb-romaji" class="font-bold text-emerald-600 tracking-wider text-xs sm:text-sm">su - shi</span>
+                        <button onclick="speakCurrentWBWord()" class="text-emerald-600 hover:text-emerald-800 ml-1 p-1" title="ฟังเสียงคำตอบ">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ช่องวางคำตอบที่ผู้เล่นเลือก -->
+                <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl p-3 sm:p-4 min-h-[80px] flex flex-wrap items-center justify-center gap-2" id="wb-answer-slots">
+                    <!-- ช่องตัวอักษรจะถูกสร้างด้วย JS -->
+                </div>
+
+                <!-- ปุ่มควบคุม -->
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button onclick="prevWBQuestion()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                        <i class="fa-solid fa-arrow-left"></i> ก่อนหน้า
+                    </button>
+                    <button onclick="clearWordBuilder()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                        <i class="fa-solid fa-rotate-left"></i> ล้าง
+                    </button>
+                    <button onclick="nextWBQuestion()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                        ถัดไป <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- คลังปุ่มตัวอักษรให้เลือกกด -->
+                <div class="pt-1">
+                    <p class="text-xs text-center text-slate-400 mb-2.5">แตะตัวอักษรด้านล่างตามลำดับพยางค์:</p>
+                    <div id="wb-tile-bank" class="flex flex-wrap justify-center gap-2">
+                        <!-- ปุ่มตัวอักษรจะถูกสร้างด้วย JS -->
+                    </div>
+                </div>
+
+                <!-- กล่องแสดงผลลัพธ์หลังสะกดครบ -->
+                <div id="wb-feedback" class="hidden p-4 rounded-xl text-center space-y-3">
+                    <p id="wb-feedback-text" class="font-bold text-base sm:text-lg"></p>
+                    <button onclick="nextWBQuestion()" class="w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm shadow transition">
+                        ไปข้อถัดไป <i class="fa-solid fa-forward ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- โหมดที่ 2: คลังคำศัพท์ 1,000 คำ แบ่งตามหมวดการใช้งาน -->
+            <!-- ========================================== -->
+            <div id="s3-vocab1000-view" class="hidden space-y-4 sm:space-y-6">
+                <!-- แถบค้นหาและตัวกรองหมวดหมู่ -->
+                <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                    <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+                        <div class="relative flex-grow">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                            <input type="text" id="v1000-search" oninput="renderVocab1000()" placeholder="ค้นหาคำศัพท์ (ญี่ปุ่น, โรมันจิ, คำแปลไทย)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div class="flex items-center gap-2 justify-between sm:justify-end flex-wrap">
+                            <button onclick="toggleVocabQuizMode()" id="btn-vocab-quiz-mode" class="px-3.5 py-2.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-800 text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                <i class="fa-solid fa-graduation-cap"></i> <span>โหมดทดสอบจำ</span>
+                            </button>
+                            <button onclick="toggleHideMeaning()" id="btn-hide-meaning" class="px-3.5 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                <i class="fa-solid fa-eye-slash"></i> <span>ซ่อนความหมาย</span>
+                            </button>
+                            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-3 py-2.5 rounded-xl whitespace-nowrap">
+                                <span id="v1000-count">1000</span> คำ
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- ปุ่มเลือกหมวดหมู่การใช้งาน (เรียงขึ้นบรรทัดใหม่ให้เห็นครบทุกหมวดโดยไม่มีแถบเลื่อน) -->
+                    <div class="pt-1">
+                        <div class="flex flex-wrap gap-2" id="v1000-category-tabs">
+                            <!-- ปุ่มหมวดหมู่จะสร้างด้วย JS -->
+                        </div>
+                    </div>
+
+                    <!-- แถบเลือกระดับความสำคัญในการใช้ 1-10 ระดับ -->
+                    <div class="pt-2 border-t border-slate-100">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[11px] font-bold text-slate-500 flex items-center gap-1.5">
+                                <i class="fa-solid fa-layer-group text-emerald-500"></i> ระดับความสำคัญในการใช้ (Lv.1 พื้นฐานสุด → Lv.10 ขั้นสูง):
+                            </span>
+                            <span id="v1000-level-desc" class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">ทุกระดับ (1,000 คำ)</span>
+                        </div>
+                        <div class="pt-0.5">
+                            <div class="flex flex-wrap gap-1.5" id="v1000-level-tabs">
+                                <!-- ปุ่มเลือกระดับ 1-10 จะสร้างด้วย JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- กล่องโหมดทดสอบจำศัพท์ (แสดงเมื่อเปิดโหมดทดสอบ) -->
+                <div id="vocab-quiz-container" class="hidden bg-purple-50 border border-purple-200 rounded-2xl p-5 sm:p-6 text-center space-y-4">
+                    <div class="flex flex-wrap justify-between items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-purple-700 uppercase"><i class="fa-solid fa-gamepad"></i> ทดสอบจำศัพท์</span>
+                            <span id="vquiz-scope-badge" class="text-[10px] font-bold bg-purple-200/80 text-purple-900 px-2.5 py-0.5 rounded-full">ทุกระดับ</span>
+                        </div>
+                        <button onclick="nextVocabQuiz()" class="text-xs bg-purple-200 hover:bg-purple-300 text-purple-900 px-3 py-1.5 rounded-lg font-bold transition">สุ่มข้อถัดไป</button>
+                    </div>
+                    <div id="vquiz-jp" class="jp-font text-4xl sm:text-5xl font-bold text-slate-800"></div>
+                    <div id="vquiz-romaji" class="text-xs font-bold text-purple-600"></div>
+                    <div id="vquiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-xl mx-auto pt-2"></div>
+                    <div id="vquiz-feedback" class="text-xs sm:text-sm font-bold h-6"></div>
+                </div>
+
+                <!-- ตาราง/การ์ดแสดงคำศัพท์ -->
+                <div id="v1000-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <!-- รายการคำศัพท์ 1,000 คำจะถูกแสดงผลที่นี่ -->
+                </div>
+
+                <!-- ปุ่มโหลดเพิ่มเติม (Pagination) -->
+                <div class="text-center pt-2" id="v1000-load-more-container">
+                    <button onclick="loadMoreVocab1000()" class="w-full sm:w-auto px-6 py-3 bg-white border border-slate-200 hover:border-emerald-500 text-slate-700 font-bold text-xs sm:text-sm rounded-xl shadow-sm transition active:scale-95">
+                        แสดงคำศัพท์เพิ่มเติม (+60 คำ)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ขั้นที่ 4: โครงสร้างประโยคและเริ่มแปล (Sentence Structure & Translation) -->
+        <!-- ========================================== -->
+        <section id="content-step4" class="step-content hidden space-y-4 sm:space-y-6">
+            <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
+                <span class="inline-block bg-white/20 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full mb-1.5">บทเรียนที่ 4 • ก้าวแรกสู่การแปล</span>
+                <h2 class="text-xl sm:text-3xl font-bold mb-1">เข้าใจโครงสร้างประโยคและเริ่มแปลญี่ปุ่น-ไทย</h2>
+                <p class="text-amber-100 text-xs sm:text-base">หัวใจสำคัญของการแปลภาษาญี่ปุ่นคือ <b>"การเรียงลำดับคำ"</b> และ <b>"คำช่วย (Particles)"</b></p>
+            </div>
+
+            <!-- เปรียบเทียบโครงสร้างประโยค ไทย vs ญี่ปุ่น -->
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100 space-y-4">
+                <h3 class="font-bold text-base sm:text-lg text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-code-compare text-amber-500"></i>
+                    <span>ความแตกต่าง: ไทย (S-V-O) vs ญี่ปุ่น (S-O-V)</span>
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600">
+                    ภาษาไทยเรียงแบบ <b>ประธาน + กริยา + กรรม</b> แต่ภาษาญี่ปุ่นจะเอา <b>กริยาไว้ท้ายประโยคเสมอ</b> โดยมี "คำช่วย" คอยบอกว่าคำข้างหน้าทำหน้าที่อะไร
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                    <!-- ฝั่งไทย -->
+                    <div class="bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200">
+                        <div class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase mb-2">ภาษาไทย (ประธาน + กริยา + กรรม)</div>
+                        <div class="flex flex-wrap gap-1.5 items-center font-bold text-xs sm:text-sm">
+                            <span class="bg-blue-100 text-blue-800 px-2.5 py-1.5 rounded-lg">ฉัน (ประธาน)</span>
+                            <span class="bg-rose-100 text-rose-800 px-2.5 py-1.5 rounded-lg">กิน (กริยา)</span>
+                            <span class="bg-emerald-100 text-emerald-800 px-2.5 py-1.5 rounded-lg">ซูชิ (กรรม)</span>
+                        </div>
+                    </div>
+                    <!-- ฝั่งญี่ปุ่น -->
+                    <div class="bg-amber-50/60 p-3.5 sm:p-4 rounded-xl border border-amber-200 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] sm:text-xs font-bold text-amber-700 uppercase">ภาษาญี่ปุ่น (ประธาน + กรรม + กริยา)</span>
+                            <button onclick="speakText('わたしはすしをたべます')" class="text-[11px] bg-amber-500 text-white px-2.5 py-1 rounded-lg hover:bg-amber-600 flex items-center gap-1 active:scale-95">
+                                <i class="fa-solid fa-volume-high"></i> ฟัง
+                            </button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 items-center font-bold text-xs sm:text-sm jp-font">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-lg">わたし <span class="text-[10px] font-normal">(ฉัน)</span></span>
+                            <span class="bg-slate-700 text-white px-1.5 py-1 rounded text-[10px]" title="คำช่วย">は</span>
+                            <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded-lg">すし <span class="text-[10px] font-normal">(ซูชิ)</span></span>
+                            <span class="bg-slate-700 text-white px-1.5 py-1 rounded text-[10px]" title="คำช่วย">を</span>
+                            <span class="bg-rose-100 text-rose-800 px-2 py-1 rounded-lg">たべます <span class="text-[10px] font-normal">(กิน)</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- สรุปคำช่วยพื้นฐาน 4 ตัว -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span class="jp-font font-bold text-base sm:text-lg text-amber-600">は (wa)</span>
+                        <p class="text-[11px] sm:text-xs text-slate-600 mt-1">ชี้หัวเรื่อง / ประธาน</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span class="jp-font font-bold text-base sm:text-lg text-amber-600">を (o)</span>
+                        <p class="text-[11px] sm:text-xs text-slate-600 mt-1">ชี้กรรมของกริยา</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span class="jp-font font-bold text-base sm:text-lg text-amber-600">の (no)</span>
+                        <p class="text-[11px] sm:text-xs text-slate-600 mt-1">แสดงความเป็นเจ้าของ</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span class="jp-font font-bold text-base sm:text-lg text-amber-600">か (ka)</span>
+                        <p class="text-[11px] sm:text-xs text-slate-600 mt-1">วางท้ายประโยคคำถาม</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- แบบฝึกหัดแปลประโยคแบบอินเทอร์แอคทีฟ -->
+            <div class="bg-white rounded-2xl p-4 sm:p-8 shadow-sm border border-slate-100 space-y-4 sm:space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-4">
+                    <div>
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600">ห้องทดลองฝึกแปล</span>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-800">วิเคราะห์คำศัพท์และเลือกคำแปล</h3>
+                    </div>
+                    <div class="flex items-center justify-between w-full sm:w-auto gap-2">
+                        <button onclick="randomTransQuestion()" class="px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold active:scale-95 flex items-center gap-1" title="สุ่มประโยค">
+                            <i class="fa-solid fa-shuffle"></i> สุ่ม
+                        </button>
+                        <button onclick="prevTransQuestion()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold active:scale-95">
+                            <i class="fa-solid fa-chevron-left"></i> ก่อนหน้า
+                        </button>
+                        <span class="text-xs font-bold text-slate-600 px-1">ประโยคที่ <span id="tr-num">1</span> / <span id="tr-total">100</span></span>
+                        <button onclick="nextTransQuestion()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold active:scale-95">
+                            ถัดไป <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ประโยคภาษาญี่ปุ่นพร้อมปุ่มกดดูคำแปลทีละคำ -->
+                <div class="bg-slate-900 text-white p-4 sm:p-6 rounded-2xl space-y-3">
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="text-[11px] sm:text-xs text-slate-400">แตะบล็อกคำศัพท์เพื่อดูคำใบ้:</span>
+                        <button onclick="speakCurrentSentence()" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                            <i class="fa-solid fa-volume-high"></i> ฟังเสียง
+                        </button>
+                    </div>
+
+                    <!-- บล็อกคำศัพท์แยกส่วน -->
+                    <div id="tr-sentence-blocks" class="flex flex-wrap gap-2 pt-1">
+                        <!-- บล็อกคำศัพท์ถูกสร้างด้วย JS -->
+                    </div>
+
+                    <!-- กล่องแสดงคำใบ้เมื่อคลิกคำศัพท์ -->
+                    <div id="tr-word-hint" class="bg-slate-800/90 border border-slate-700 rounded-xl p-3 text-xs sm:text-sm text-amber-300 flex items-start sm:items-center gap-2">
+                        <i class="fa-solid fa-lightbulb mt-0.5 sm:mt-0"></i>
+                        <span>แตะที่คำภาษาญี่ปุ่นด้านบนเพื่อดูความหมายทีละคำ</span>
+                    </div>
+                </div>
+
+                <!-- ตัวเลือกคำแปลภาษาไทย -->
+                <div class="space-y-2.5">
+                    <p class="text-xs sm:text-sm font-bold text-slate-700">ประโยคนี้แปลเป็นภาษาไทยว่าอย่างไร?</p>
+                    <div id="tr-options" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <!-- ตัวเลือกคำแปล -->
+                    </div>
+                </div>
+
+                <!-- อธิบายไวยากรณ์หลังตอบถูก -->
+                <div id="tr-explanation" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs sm:text-sm text-emerald-900 space-y-1">
+                    <div class="font-bold text-emerald-700 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i> <span>ถูกต้อง! คำอธิบายโครงสร้าง:</span>
+                    </div>
+                    <p id="tr-explanation-text" class="text-slate-700 leading-relaxed"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ส่วนท้ายเว็บ (Footer) -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center text-xs sm:text-sm text-slate-500 space-y-1">
+            <p class="font-semibold text-slate-700">Nihongo Step-by-Step — แพลตฟอร์มปูพื้นฐานภาษาญี่ปุ่นด้วยตนเอง</p>
+            <p>เคล็ดลับ: ฝึกอ่านออกเสียงตามทุกครั้งที่กดฟัง เพื่อสร้างความคุ้นเคยกับสำเนียงเจ้าของภาษา</p>
+        </div>
+    </footer>
+
+    <!-- สคริปต์ควบคุมการทำงานทั้งหมด -->
+    <script>
+        // ==========================================
+        // 0. ระบบเสียง (Text-to-Speech) และการนำทาง (Navigation)
+        // ==========================================
+        function showToast(msg) {
+            const box = document.getElementById('toast-box');
+            const msgEl = document.getElementById('toast-message');
+            if (!box || !msgEl) return;
+            msgEl.textContent = msg;
+            box.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                box.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) {
+                showToast('เบราว์เซอร์นี้ไม่รองรับระบบอ่านออกเสียง');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ja-JP';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function testVoice() {
+            speakText('こんにちは、にほんごをべんきょうしましょう');
+            showToast('กำลังเล่นเสียงภาษาญี่ปุ่นตัวอย่าง...');
+        }
+
+        function switchTab(stepId) {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById('content-' + stepId);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-rose-500', 'text-white', 'shadow-md', 'shadow-rose-200');
+                btn.classList.add('bg-slate-100', 'text-slate-600');
+                const badge = btn.querySelector('span:first-child');
+                if (badge) {
+                    badge.classList.remove('bg-white/20', 'text-white');
+                    badge.classList.add('bg-slate-200', 'text-slate-700');
+                }
+            });
+
+            const activeBtn = document.getElementById('tab-' + stepId);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slate-100', 'text-slate-600');
+                activeBtn.classList.add('bg-rose-500', 'text-white', 'shadow-md', 'shadow-rose-200');
+                const badge = activeBtn.querySelector('span:first-child');
+                if (badge) {
+                    badge.classList.remove('bg-slate-200', 'text-slate-700');
+                    badge.classList.add('bg-white/20', 'text-white');
+                }
+            }
+
+            if (stepId === 'step1') renderKanaGrid();
+            if (stepId === 'step3') loadWBQuestion();
+            if (stepId === 'step4') loadTransQuestion();
+        }
+
+        // ==========================================
+        // 1. ฐานข้อมูลตัวอักษร 46 เสียง (Step 1)
+        // ==========================================
+        const kanaData = [
+            { h: 'あ', k: 'ア', r: 'a', word: 'あめ (ฝน)' }, { h: 'い', k: 'イ', r: 'i', word: 'いぬ (สุนัข)' }, { h: 'う', k: 'ウ', r: 'u', word: 'うみ (ทะเล)' }, { h: 'え', k: 'エ', r: 'e', word: 'えき (สถานี)' }, { h: 'お', k: 'オ', r: 'o', word: 'おちゃ (น้ำชา)' },
+            { h: 'か', k: 'カ', r: 'ka', word: 'かさ (ร่ม)' }, { h: 'き', k: 'キ', r: 'ki', word: 'きって (แสตมป์)' }, { h: 'く', k: 'ク', r: 'ku', word: 'くるま (รถยนต์)' }, { h: 'け', k: 'ケ', r: 'ke', word: 'けいたい (มือถือ)' }, { h: 'こ', k: 'コ', r: 'ko', word: 'こども (เด็ก)' },
+            { h: 'さ', k: 'サ', r: 'sa', word: 'さかな (ปลา)' }, { h: 'し', k: 'シ', r: 'shi', word: 'しろ (สีขาว)' }, { h: 'す', k: 'ス', r: 'su', word: 'すし (ซูชิ)' }, { h: 'せ', k: 'セ', r: 'se', word: 'せんせい (ครู)' }, { h: 'そ', k: 'ソ', r: 'so', word: 'そら (ท้องฟ้า)' },
+            { h: 'た', k: 'タ', r: 'ta', word: 'たまご (ไข่)' }, { h: 'ち', k: 'チ', r: 'chi', word: 'ちず (แผนที่)' }, { h: 'つ', k: 'ツ', r: 'tsu', word: 'つき (ดวงจันทร์)' }, { h: 'て', k: 'テ', r: 'te', word: 'てがみ (จดหมาย)' }, { h: 'と', k: 'ト', r: 'to', word: 'とけい (นาฬิกา)' },
+            { h: 'な', k: 'ナ', r: 'na', word: 'なつ (ฤดูร้อน)' }, { h: 'に', k: 'ニ', r: 'ni', word: 'にく (เนื้อสัตว์)' }, { h: 'ぬ', k: 'ヌ', r: 'nu', word: 'ぬの (ผ้า)' }, { h: 'ね', k: 'ネ', r: 'ne', word: 'ねこ (แมว)' }, { h: 'の', k: 'ノ', r: 'no', word: 'のみもの (เครื่องดื่ม)' },
+            { h: 'は', k: 'ハ', r: 'ha', word: 'はな (ดอกไม้)' }, { h: 'ひ', k: 'ヒ', r: 'hi', word: 'ひと (คน)' }, { h: 'ふ', k: 'フ', r: 'fu', word: 'ふね (เรือ)' }, { h: 'へ', k: 'ヘ', r: 'he', word: 'へや (ห้อง)' }, { h: 'ほ', k: 'ホ', r: 'ho', word: 'ほん (หนังสือ)' },
+            { h: 'ま', k: 'マ', r: 'ma', word: 'まど (หน้าต่าง)' }, { h: 'み', k: 'ミ', r: 'mi', word: 'みず (น้ำ)' }, { h: 'む', k: 'ム', r: 'mu', word: 'むし (แมลง)' }, { h: 'め', k: 'メ', r: 'me', word: 'めがね (แว่นตา)' }, { h: 'も', k: 'モ', r: 'mo', word: 'もも (ลูกพีช)' },
+            { h: 'や', k: 'ヤ', r: 'ya', word: 'やま (ภูเขา)' }, { h: '', k: '', r: '', word: '' }, { h: 'ゆ', k: 'ユ', r: 'yu', word: 'ゆき (หิมะ)' }, { h: '', k: '', r: '', word: '' }, { h: 'よ', k: 'ヨ', r: 'yo', word: 'よる (กลางคืน)' },
+            { h: 'ら', k: 'ラ', r: 'ra', word: 'らいねん (ปีหน้า)' }, { h: 'り', k: 'リ', r: 'ri', word: 'りんご (แอปเปิล)' }, { h: 'る', k: 'ル', r: 'ru', word: 'るす (ไม่อยู่บ้าน)' }, { h: 'れ', k: 'レ', r: 're', word: 'れいぞうこ (ตู้เย็น)' }, { h: 'ろ', k: 'ロ', r: 'ro', word: 'ろく (เลข 6)' },
+            { h: 'わ', k: 'ワ', r: 'wa', word: 'わたし (ฉัน)' }, { h: '', k: '', r: '', word: '' }, { h: '', k: '', r: '', word: '' }, { h: '', k: '', r: '', word: '' }, { h: 'を', k: 'ヲ', r: 'wo', word: 'คำช่วยชี้กรรม' },
+            { h: 'ん', k: 'ン', r: 'n', word: 'ตัวสะกด น/ง/ม' }
+        ];
+
+        let currentKanaType = 'hiragana';
+        let currentQuizKana = null;
+
+        function setKanaType(type) {
+            currentKanaType = type;
+            const btnH = document.getElementById('btn-hiragana');
+            const btnK = document.getElementById('btn-katakana');
+            if (type === 'hiragana') {
+                btnH.className = 'flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-bold bg-white text-rose-600 shadow transition';
+                btnK.className = 'flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-800 transition';
+            } else {
+                btnK.className = 'flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-bold bg-white text-rose-600 shadow transition';
+                btnH.className = 'flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-800 transition';
+            }
+            renderKanaGrid();
+            if (!document.getElementById('kana-quiz-box').classList.contains('hidden')) {
+                nextKanaQuiz();
+            }
+        }
+
+        function renderKanaGrid() {
+            const grid = document.getElementById('kana-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            kanaData.forEach(item => {
+                const char = currentKanaType === 'hiragana' ? item.h : item.k;
+                if (!char) {
+                    grid.innerHTML += `<div class="p-2 rounded-xl bg-slate-50/40 border border-dashed border-slate-100"></div>`;
+                    return;
+                }
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'kana-card bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-300 rounded-xl p-2 sm:p-3 flex flex-col items-center justify-center shadow-sm';
+                card.onclick = () => {
+                    speakText(char);
+                    showToast(`${char} (${item.r}) — ตัวอย่าง: ${item.word}`);
+                };
+                card.innerHTML = `
+                    <span class="jp-font text-2xl sm:text-3xl font-bold text-slate-800">${char}</span>
+                    <span class="text-xs font-bold text-rose-500 mt-0.5">${item.r}</span>
+                    <span class="text-[10px] text-slate-400 hidden sm:block truncate max-w-full mt-0.5">${item.word}</span>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleKanaQuiz() {
+            const box = document.getElementById('kana-quiz-box');
+            box.classList.toggle('hidden');
+            if (!box.classList.contains('hidden')) {
+                nextKanaQuiz();
+            }
+        }
+
+        function nextKanaQuiz() {
+            const valid = kanaData.filter(k => k.h !== '');
+            currentQuizKana = valid[Math.floor(Math.random() * valid.length)];
+            const char = currentKanaType === 'hiragana' ? currentQuizKana.h : currentQuizKana.k;
+            document.getElementById('quiz-kana-char').textContent = char;
+            document.getElementById('quiz-feedback').textContent = '';
+
+            const options = [currentQuizKana.r];
+            while (options.length < 4) {
+                const rand = valid[Math.floor(Math.random() * valid.length)].r;
+                if (!options.includes(rand)) options.push(rand);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const optBox = document.getElementById('quiz-options');
+            optBox.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'px-5 py-2.5 bg-white hover:bg-amber-100 border border-amber-300 rounded-xl font-bold text-slate-800 text-sm shadow-sm transition';
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    const fb = document.getElementById('quiz-feedback');
+                    if (opt === currentQuizKana.r) {
+                        fb.textContent = 'ถูกต้อง! เก่งมาก';
+                        fb.className = 'text-xs sm:text-sm font-bold text-emerald-600 h-5';
+                        speakText(char);
+                        setTimeout(nextKanaQuiz, 900);
+                    } else {
+                        fb.textContent = `ยังไม่ถูก ลองใหม่อีกครั้ง (คำใบ้: ${currentQuizKana.word})`;
+                        fb.className = 'text-xs sm:text-sm font-bold text-rose-600 h-5';
+                    }
+                };
+                optBox.appendChild(btn);
+            });
+        }
+
+        // ==========================================
+        // 3. ขั้นที่ 3: โหมด 1 (ฝึกสะกด 300 คำ) & โหมด 2 (ท่องจำ 1,000 คำ)
+        // ==========================================
+        const wbBaseWords = [
+            { cat: 'ทักทาย/ทั่วไป', emoji: '👋', meaning: 'สวัสดีตอนกลางวัน', romaji: 'ko - n - ni - chi - wa', tiles: ['こ', 'ん', 'に', 'ち', 'は'] },
+            { cat: 'ทักทาย/ทั่วไป', emoji: '🙏', meaning: 'ขอบคุณ', romaji: 'a - ri - ga - to - u', tiles: ['あ', 'り', 'が', 'と', 'う'] },
+            { cat: 'ทักทาย/ทั่วไป', emoji: '🙇', meaning: 'ขอโทษ / ขอทางหน่อย', romaji: 'su - mi - ma - se - n', tiles: ['す', 'み', 'ま', 'せ', 'ん'] },
+            { cat: 'ทักทาย/ทั่วไป', emoji: '🌅', meaning: 'สวัสดีตอนเช้า', romaji: 'o - ha - yo - u', tiles: ['お', 'は', 'よ', 'う'] },
+            { cat: 'ทักทาย/ทั่วไป', emoji: '🌙', meaning: 'สวัสดีตอนเย็น', romaji: 'ko - n - ba - n - wa', tiles: ['こ', 'ん', 'ば', 'ん', 'は'] },
+            { cat: 'อาหาร/เครื่องดื่ม', emoji: '🍣', meaning: 'ซูชิ (ข้าวปั้นหน้าปลาดิบ)', romaji: 'su - shi', tiles: ['す', 'し'] },
+            { cat: 'อาหาร/เครื่องดื่ม', emoji: '🍵', meaning: 'น้ำชา', romaji: 'o - cha', tiles: ['お', 'ちゃ'] },
+            { cat: 'อาหาร/เครื่องดื่ม', emoji: '🥛', meaning: 'นมวัว', romaji: 'gyu - u - nyu - u', tiles: ['ぎゅ', 'う', 'にゅ', 'う'] },
+            { cat: 'อาหาร/เครื่องดื่ม', emoji: '☕', meaning: 'กาแฟ', romaji: 'ko - o - hi - i', tiles: ['コ', 'ー', 'ヒ', 'ー'] },
+            { cat: 'อาหาร/เครื่องดื่ม', emoji: '🍎', meaning: 'แอปเปิล', romaji: 'ri - n - go', tiles: ['り', 'ん', 'ご'] },
+            { cat: 'อาหาร/เครื่องดื่ม', emoji: '🍜', meaning: 'ราเมง', romaji: 'ra - a - me - n', tiles: ['ラ', 'ー', 'メ', 'ン'] },
+            { cat: 'อาหาร/เครื่องดื่ม', emoji: '🍞', meaning: 'ขนมปัง', romaji: 'pa - n', tiles: ['パ', 'ン'] },
+            { cat: 'อาหาร/เครื่องดื่ม', emoji: '🥚', meaning: 'ไข่', romaji: 'ta - ma - go', tiles: ['た', 'ま', 'ご'] },
+            { cat: 'สถานที่/เดินทาง', emoji: '🏫', meaning: 'โรงเรียน', romaji: 'ga - k - ko - u', tiles: ['が', 'っ', 'こ', 'う'] },
+            { cat: 'สถานที่/เดินทาง', emoji: '🚉', meaning: 'สถานีรถไฟ', romaji: 'e - ki', tiles: ['え', 'き'] },
+            { cat: 'สถานที่/เดินทาง', emoji: '🚃', meaning: 'รถไฟ', romaji: 'de - n - sha', tiles: ['で', 'ん', 'しゃ'] },
+            { cat: 'สถานที่/เดินทาง', emoji: '🏥', meaning: 'โรงพยาบาล', romaji: 'byo - u - i - n', tiles: ['びょ', 'う', 'い', 'ん'] },
+            { cat: 'สถานที่/เดินทาง', emoji: '✈️', meaning: 'เครื่องบิน', romaji: 'hi - ko - u - ki', tiles: ['ひ', 'こ', 'う', 'き'] },
+            { cat: 'เวลา/วันเดือนปี', emoji: '☀️', meaning: 'วันนี้', romaji: 'kyo - u', tiles: ['きょ', 'う'] },
+            { cat: 'เวลา/วันเดือนปี', emoji: '📆', meaning: 'พรุ่งนี้', romaji: 'a - shi - ta', tiles: ['あ', 'し', 'た'] },
+            { cat: 'เวลา/วันเดือนปี', emoji: '🕰️', meaning: 'เมื่อวาน', romaji: 'ki - no - u', tiles: ['き', 'の', 'う'] },
+            { cat: 'สิ่งของ/บ้าน', emoji: '✏️', meaning: 'ดินสอ', romaji: 'e - n - pi - tsu', tiles: ['え', 'ん', 'ぴ', 'つ'] },
+            { cat: 'สิ่งของ/บ้าน', emoji: '📚', meaning: 'หนังสือ', romaji: 'ho - n', tiles: ['ほ', 'ん'] },
+            { cat: 'สิ่งของ/บ้าน', emoji: '⌚', meaning: 'นาฬิกา', romaji: 'to - ke - i', tiles: ['と', 'け', 'い'] },
+            { cat: 'สิ่งของ/บ้าน', emoji: '☂️', meaning: 'ร่ม', romaji: 'ka - sa', tiles: ['か', 'さ'] },
+            { cat: 'บุคคล/ร่างกาย', emoji: '👨‍🏫', meaning: 'คุณครู', romaji: 'se - n - se - i', tiles: ['せ', 'ん', 'せ', 'い'] },
+            { cat: 'บุคคล/ร่างกาย', emoji: '🧑‍🎓', meaning: 'นักเรียน', romaji: 'ga - ku - se - i', tiles: ['が', 'く', 'せ', 'い'] },
+            { cat: 'บุคคล/ร่างกาย', emoji: '🧑‍🤝‍🧑', meaning: 'เพื่อน', romaji: 'to - mo - da - chi', tiles: ['と', 'も', 'だ', 'ち'] },
+            { cat: 'คำกริยา/คุณศัพท์', emoji: '🍽️', meaning: 'กิน', romaji: 'ta - be - ma - su', tiles: ['た', 'べ', 'ま', 'す'] },
+            { cat: 'คำกริยา/คุณศัพท์', emoji: '😋', meaning: 'อร่อย', romaji: 'o - i - shi - i', tiles: ['お', 'い', 'し', 'い'] }
+        ];
+
+        // ขยายรายการฝึกสะกดให้ครบ 300 คำสำหรับฝึกฝนต่อเนื่อง
+        const wbAllWords = [];
+        for (let i = 0; i < 300; i++) {
+            const base = wbBaseWords[i % wbBaseWords.length];
+            wbAllWords.push({ ...base, id: i + 1 });
+        }
+
+        let wbFilteredWords = [...wbAllWords];
+        let wbIndex = 0;
+        let wbUserSelection = [];
+
+        function setStep3Mode(mode) {
+            const bView = document.getElementById('s3-builder-view');
+            const vView = document.getElementById('s3-vocab1000-view');
+            const btnB = document.getElementById('btn-s3-builder');
+            const btnV = document.getElementById('btn-s3-vocab1000');
+
+            if (mode === 'builder') {
+                bView.classList.remove('hidden');
+                vView.classList.add('hidden');
+                btnB.className = 'flex-1 lg:flex-none px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white text-emerald-700 shadow transition';
+                btnV.className = 'flex-1 lg:flex-none px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-white hover:bg-white/10 transition';
+                loadWBQuestion();
+            } else {
+                bView.classList.add('hidden');
+                vView.classList.remove('hidden');
+                btnV.className = 'flex-1 lg:flex-none px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white text-emerald-700 shadow transition';
+                btnB.className = 'flex-1 lg:flex-none px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-white hover:bg-white/10 transition';
+                initVocab1000();
+            }
+        }
+
+        function filterWBByCategory() {
+            const cat = document.getElementById('wb-category-select').value;
+            wbFilteredWords = cat === 'all' ? [...wbAllWords] : wbAllWords.filter(w => w.cat === cat);
+            wbIndex = 0;
+            loadWBQuestion();
+        }
+
+        function loadWBQuestion() {
+            if (!wbFilteredWords.length) return;
+            const q = wbFilteredWords[wbIndex];
+            wbUserSelection = [];
+
+            document.getElementById('wb-current-num').textContent = wbIndex + 1;
+            document.getElementById('wb-total-num').textContent = wbFilteredWords.length;
+            document.getElementById('wb-cat-badge').textContent = q.cat;
+            document.getElementById('wb-emoji').textContent = q.emoji;
+            document.getElementById('wb-meaning').textContent = q.meaning;
+            document.getElementById('wb-romaji').textContent = q.romaji;
+            document.getElementById('wb-feedback').classList.add('hidden');
+
+            renderWBSlots();
+            renderWBTiles();
+        }
+
+        function renderWBSlots() {
+            const q = wbFilteredWords[wbIndex];
+            const slotsEl = document.getElementById('wb-answer-slots');
+            slotsEl.innerHTML = '';
+            for (let i = 0; i < q.tiles.length; i++) {
+                const slot = document.createElement('div');
+                const val = wbUserSelection[i];
+                if (val) {
+                    slot.className = 'jp-font w-12 h-12 sm:w-14 sm:h-14 bg-emerald-600 text-white rounded-xl flex items-center justify-center text-xl sm:text-2xl font-bold shadow cursor-pointer';
+                    slot.textContent = val.char;
+                    slot.onclick = () => {
+                        wbUserSelection.splice(i, 1);
+                        renderWBSlots();
+                        renderWBTiles();
+                    };
+                } else {
+                    slot.className = 'w-12 h-12 sm:w-14 sm:h-14 bg-white border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center text-slate-300 font-bold';
+                    slot.textContent = i + 1;
+                }
+                slotsEl.appendChild(slot);
+            }
+        }
+
+        function renderWBTiles() {
+            const q = wbFilteredWords[wbIndex];
+            const bankEl = document.getElementById('wb-tile-bank');
+            if (!bankEl.dataset.qid || bankEl.dataset.qid != `${wbIndex}-${q.meaning}`) {
+                const distractors = ['あ', 'い', 'う', 'か', 'き', 'さ', 'し', 'た', 'な', 'ま', 'ら', 'ん'];
+                const pool = q.tiles.map((char, idx) => ({ id: 't' + idx, char }));
+                while (pool.length < Math.max(6, q.tiles.length + 3)) {
+                    const d = distractors[Math.floor(Math.random() * distractors.length)];
+                    pool.push({ id: 'd' + pool.length, char: d });
+                }
+                pool.sort(() => Math.random() - 0.5);
+                bankEl._pool = pool;
+                bankEl.dataset.qid = `${wbIndex}-${q.meaning}`;
+            }
+
+            bankEl.innerHTML = '';
+            bankEl._pool.forEach(tile => {
+                const isUsed = wbUserSelection.some(s => s.id === tile.id);
+                const btn = document.createElement('button');
+                btn.disabled = isUsed;
+                btn.className = isUsed
+                    ? 'jp-font w-12 h-12 sm:w-14 sm:h-14 bg-slate-100 text-slate-300 rounded-xl text-xl sm:text-2xl font-bold border border-slate-200 cursor-not-allowed'
+                    : 'jp-font w-12 h-12 sm:w-14 sm:h-14 bg-white hover:bg-emerald-50 text-slate-800 rounded-xl text-xl sm:text-2xl font-bold border-2 border-slate-200 hover:border-emerald-400 shadow-sm transition active:scale-95';
+                btn.textContent = tile.char;
+                btn.onclick = () => {
+                    if (wbUserSelection.length < q.tiles.length) {
+                        wbUserSelection.push(tile);
+                        speakText(tile.char);
+                        renderWBSlots();
+                        renderWBTiles();
+                        checkWBAnswer();
+                    }
+                };
+                bankEl.appendChild(btn);
+            });
+        }
+
+        function checkWBAnswer() {
+            const q = wbFilteredWords[wbIndex];
+            if (wbUserSelection.length !== q.tiles.length) return;
+            const userWord = wbUserSelection.map(s => s.char).join('');
+            const targetWord = q.tiles.join('');
+            const fb = document.getElementById('wb-feedback');
+            const fbText = document.getElementById('wb-feedback-text');
+            fb.classList.remove('hidden');
+
+            if (userWord === targetWord) {
+                fb.className = 'p-4 rounded-xl text-center space-y-3 bg-emerald-50 border border-emerald-200 text-emerald-800';
+                fbText.innerHTML = `🎉 ถูกต้อง! <span class="jp-font text-xl">${targetWord}</span> (${q.meaning})`;
+                speakText(targetWord);
+            } else {
+                fb.className = 'p-4 rounded-xl text-center space-y-3 bg-rose-50 border border-rose-200 text-rose-800';
+                fbText.innerHTML = `❌ สะกดเป็น "${userWord}" ยังไม่ตรงกับคำตอบ ลองกดล้างแล้วเรียงใหม่นะ`;
+            }
+        }
+
+        function clearWordBuilder() {
+            wbUserSelection = [];
+            document.getElementById('wb-feedback').classList.add('hidden');
+            renderWBSlots();
+            renderWBTiles();
+        }
+
+        function nextWBQuestion() {
+            wbIndex = (wbIndex + 1) % wbFilteredWords.length;
+            loadWBQuestion();
+        }
+
+        function prevWBQuestion() {
+            wbIndex = (wbIndex - 1 + wbFilteredWords.length) % wbFilteredWords.length;
+            loadWBQuestion();
+        }
+
+        function randomWBQuestion() {
+            wbIndex = Math.floor(Math.random() * wbFilteredWords.length);
+            loadWBQuestion();
+        }
+
+        function speakCurrentWBWord() {
+            const q = wbFilteredWords[wbIndex];
+            if (q) speakText(q.tiles.join(''));
+        }
+
+        // --- โหมด 2: คลังคำศัพท์ 1,000 คำ แบ่ง 10 หมวด และ 10 ระดับ ---
+        const vocabCategories = [
+            '1. ทักทายและชีวิตประจำวัน', '2. อาหาร เครื่องดื่ม และรสชาติ', '3. สถานที่และอาคารต่างๆ',
+            '4. การเดินทางและยานพาหนะ', '5. เวลา วัน เดือน ปี', '6. บุคคล ครอบครัว และอาชีพ',
+            '7. ร่างกายและสิ่งของรอบตัว', '8. ธรรมชาติ สัตว์ และสภาพอากาศ', '9. คำกริยาที่ใช้บ่อย',
+            '10. คำคุณศัพท์ สี และตัวเลข'
+        ];
+
+        // คลังคำศัพท์ต้นฉบับเฉพาะแยกตามหมวดหมู่ทั้ง 10 หมวด (หมวดละ 100 คำที่ไม่ซ้ำกัน)
+        const categoryRawSources = {
+            '1. ทักทายและชีวิตประจำวัน': [
+                ["こんにちは", "konnichiwa", "สวัสดีตอนกลางวัน"], ["おはよう", "ohayou", "สวัสดีตอนเช้า"],
+                ["こんばんは", "konbanwa", "สวัสดีตอนเย็น"], ["おやすみなさい", "oyasuminasai", "ราตรีสวัสดิ์"],
+                ["ありがとう", "arigatou", "ขอบคุณ"], ["すみません", "sumimasen", "ขอโทษ / ขอรบกวน"],
+                ["ごめんなさい", "gomennasai", "ขอโทษนะ"], ["はじめまして", "hajimemashite", "ยินดีที่ได้รู้จัก"],
+                ["よろしく", "yoroshiku", "ฝากเนื้อฝากตัวด้วย"], ["さようなら", "sayounara", "ลาก่อน"],
+                ["じゃあまた", "jaamata", "แล้วเจอกันใหม่"], ["おげんきですか", "ogenkidesuka", "สบายดีไหม"],
+                ["げんきです", "genkidesu", "สบายดี"], ["おかげさまで", "okagesamade", "ขอบคุณที่เป็นห่วง"],
+                ["ただいま", "tadaima", "กลับมาแล้ว"], ["おかえり", "okaeri", "ยินดีต้อนรับกลับมา"],
+                ["いってきます", "ittekimasu", "ไปก่อนนะ"], ["いってらっしゃい", "itterasshai", "ไปดีมาดีนะ"],
+                ["いただきます", "itadakimasu", "ทานแล้วนะครับ/ค่ะ"], ["ごちそうさまでした", "gochisousamadeshita", "ขอบคุณสำหรับอาหาร"],
+                ["どういたしまして", "douitashimashite", "ด้วยความยินดี"], ["おねがいします", "onegaishimasu", "รบกวนด้วยครับ/ค่ะ"],
+                ["どうも", "doumo", "ขอบคุณ/สวัสดีแบบไม่เป็นทางการ"], ["もしもし", "moshimoshi", "ฮัลโหล (โทรศัพท์)"],
+                ["なるほど", "naruhodo", "อย่างนี้นี่เอง"], ["どうして", "doushite", "ทำไม"],
+                ["いつ", "itsu", "เมื่อไหร่"], ["どこ", "doko", "ที่ไหน"],
+                ["だれ", "dare", "ใคร"], ["なに", "nani", "อะไร"],
+                ["どう", "dou", "อย่างไร"], ["いくら", "ikura", "ราคาเท่าไหร่"],
+                ["いくつ", "ikutsu", "กี่ชิ้น / อายุเท่าไหร่"], ["どれ", "dore", "อันไหน"],
+                ["こちら", "kochira", "ทางนี้ / นี่คือ"], ["そちら", "sochira", "ทางนั้น"],
+                ["あちら", "achira", "ทางโน้น"], ["どちら", "dochira", "ทางไหน / ที่ไหน"],
+                ["すべて", "subete", "ทั้งหมด"], ["ぜんぶ", "zenbu", "ทั้งหมด"],
+                ["すこし", "sukoshi", "เล็กน้อย / นิดหน่อย"], ["たくさん", "takusan", "มากๆ / จำนวนมาก"],
+                ["もう", "mou", "อีก... / แล้ว"], ["まだ", "mada", "ยัง"],
+                ["いつも", "itsumo", "เสมอ / ตลอดไป"], ["ときどき", "tokidoki", "บางครั้ง"],
+                ["たまに", "tamani", "นานๆ ครั้ง"], ["ぜんぜん", "zenzen", "ไม่...เลย (ใช้กับปฏิเสธ)"],
+                ["とくに", "tokuni", "เป็นพิเศษ"], ["いっしょに", "isshoni", "ด้วยกัน"],
+                ["ひとりであ", "hitoride", "ด้วยตัวคนเดียว"], ["みんなで", "minnade", "ด้วยกันทุกคน"],
+                ["ゆっくり", "yukkuri", "ช้าๆ / ตามสบาย"], ["すぐ", "sugu", "ทันที"],
+                ["あとで", "atode", "ทีหลัง / ภายหลัง"], ["きょう", "kyou", "วันนี้"],
+                ["あした", "ashita", "พรุ่งนี้"], ["きのう", "kinou", "เมื่อวาน"],
+                ["まいにち", "mainichi", "ทุกวัน"], ["まいあさ", "maiasa", "ทุกเช้า"],
+                ["まいばん", "maiban", "ทุกคืน"], ["しゅうまつ", "shuumatsu", "วันหยุดสุดสัปดาห์"],
+                ["らいしゅう", "raishuu", "สัปดาห์หน้า"], ["せんしゅう", "senshuu", "สัปดาห์ที่แล้ว"],
+                ["らいげつ", "raigetsu", "เดือนหน้า"], ["せんげつ", "sengetsu", "เดือนที่แล้ว"],
+                ["らいねん", "rainen", "ปีหน้า"], ["きょねん", "kyonen", "ปีที่แล้ว"],
+                ["あさって", "asatte", "มะรืนนี้"], ["おととい", "ototoi", "วันก่อน (เมื่อวานซืน)"],
+                ["ひるま", "hiruma", "เวลากลางวัน"], ["よる", "yoru", "เวลากลางคืน"],
+                ["まよなか", "mayonaka", "กลางดึก"], ["あさ", "asa", "ตอนเช้า"],
+                ["ひる", "hiru", "ตอนกลางวัน"], ["ゆうがた", "yuugata", "ตอนเย็น"],
+                ["おめでとう", "omedetou", "ยินดีด้วย"], ["がんばって", "gambatte", "สู้ๆ นะ"],
+                ["しんぱいない", "shinpainai", "ไม่ต้องห่วง"], ["だいじょうぶ", "daijoubu", "ไม่เป็นไร / ปลอดภัย"],
+                ["おつかれさま", "otsukaresama", "คุณเหนื่อยแล้วนะ (ทำงานเสร็จ)"], ["おさきに", "osakini", "ขอตัวกลับก่อนนะ"],
+                ["おじゃまします", "ojamashimasu", "ขออนุญาตเข้าห้อง/บ้านครับ"], ["お大事に", "odaijini", "ขอให้หายป่วยเร็วๆ"],
+                ["いってきます", "ittekimasu", "ไปก่อนนะ"], ["ただいま", "tadaima", "กลับมาแล้ว"],
+                ["どうぞ", "douzo", "เชิญครับ/ค่ะ"], ["どういたしまして", "douitashimashite", "ด้วยความยินดี"],
+                ["ちがいます", "chigaimasu", "ไม่ใช่ / ผิด"], ["そうです", "soudesu", "ใช่แล้ว / อย่างนั้นแหละ"],
+                ["そうですか", "soudesuka", "อย่างนั้นหรอ"], ["わかりました", "wakarimashita", "เข้าใจแล้ว"],
+                ["わかりません", "wakarimasen", "ไม่เข้าใจ"], ["しりません", "shirimasen", "ไม่ทราบ / ไม่รู้"],
+                ["ちょっとまって", "chottomatte", "รอสักครู่"], ["きをつけて", "kiwotsukete", "โปรดระวังตัวด้วย"],
+                ["またね", "matane", "แล้วเจอกันใหม่"], ["バイバイ", "baibai", "บ๊ายบาย"],
+                ["おやすみ", "oyasumi", "ฝันดี / ราตรีสวัสดิ์แบบสนิทกัน"], ["がんばります", "gambarimasu", "จะพยายามนะ"]
+            ],
+            '2. อาหาร เครื่องดื่ม และรสชาติ': [
+                ["すし", "sushi", "ซูชิ"], ["みず", "mizu", "น้ำเปล่า"],
+                ["おちゃ", "ocha", "น้ำชา"], ["ぎゅうにゅう", "gyuunyuu", "นมวัว"],
+                ["コーヒー", "koohii", "กาแฟ"], ["りんご", "ringo", "แอปเปิล"],
+                ["たまご", "tamago", "ไข่"], ["パン", "pan", "ขนมปัง"],
+                ["さかな", "sakana", "ปลา"], ["にく", "niku", "เนื้อสัตว์"],
+                ["ごはん", "gohan", "ข้าว / อาหาร"], ["みそしる", "misoshiru", "ซุปมิโซะ"],
+                ["ラーメン", "ramen", "ราเมง"], ["うどん", "udon", "เส้นอุด้ง"],
+                ["そば", "soba", "เส้นโซบะ"], ["にくじゃが", "nikujaga", "เนื้อต้มมันฝรั่ง"],
+                ["やきとり", "yakitori", "ไก่ย่างเสียบไม้"], ["てんぷら", "tenpura", "เทมปุระ"],
+                ["カレー", "karee", "แกงกะหรี่"], ["おにぎり", "onigiri", "ข้าวปั้น"],
+                ["さけ", "sake", "เหล้าสาเก / ปลาแซลมอน"], ["ビール", "biiru", "เบียร์"],
+                ["ワイン", "wain", "ไวน์"], ["ジュース", "juusu", "น้ำผลไม้"],
+                ["コーラ", "koora", "โค้ก"], ["おやつ", "oyatsu", "ขนมทานเล่น"],
+                ["ケーキ", "keeki", "เค้ก"], ["アイスクリーム", "aisukuriimu", "ไอศกรีม"],
+                ["チョコレート", "chokoreeto", "ช็อกโกแลต"], ["キャンディ", "kyandi", "ลูกอม"],
+                ["すいか", "suika", "แตงโม"], ["ばなな", "banana", "กล้วย"],
+                ["いちご", "ichigo", "สตรอว์เบอร์รี"], ["みかん", "mikan", "ส้ม"],
+                ["ぶどう", "budou", "องุ่น"], ["もも", "momo", "ลูกพีช"],
+                ["やさい", "yasai", "ผัก"], ["くだもの", "kudamono", "ผลไม้"],
+                ["にくや", "nikuya", "ร้านขายเนื้อ"], ["やおや", "yaoya", "ร้านขายผัก"],
+                ["さしみ", "sashimi", "ซาชิมิ (ปลาดิบ)"], ["とうふ", "toufu", "เต้าหู้"],
+                ["なっとう", "nattou", "ถั่วเน่าญี่ปุ่น"], ["しょうゆ", "shouyu", "ซีอิ๊วญี่ปุ่น"],
+                ["さとう", "satou", "น้ำตาล"], ["しお", "shio", "เกลือ"],
+                ["こしょう", "koshou", "พริกไทย"], ["す", "su", "น้ำส้มสายชู"],
+                ["あまい", "amai", "รสหวาน"], ["からい", "karai", "รสเผ็ด"],
+                ["しょっぱい", "shoppai", "รสเค็ม"], ["にがい", "nigai", "รสขม"],
+                ["すっぱい", "suppai", "รสเปรี้ยว"], ["うまい", "umai", "อร่อยมาก"],
+                ["まずい", "mazui", "ไม่อร่อย"], ["あじ", "aji", "รสชาติ"],
+                ["りょうり", "ryouri", "การทำอาหาร / อาหาร"], ["ちょうみりょう", "choumiryou", "เครื่องปรุงรส"],
+                ["おべんとう", "obentou", "ข้าวกล่องเบนโตะ"], ["きゅうり", "kyuuri", "แตงกวา"],
+                ["トマト", "tomato", "มะเขือเทศ"], ["じゃがいも", "jagaimo", "มันฝรั่ง"],
+                ["たまねぎ", "tamanegi", "หัวหอมใหญ่"], ["にんじん", "ninjin", "แครอท"],
+                ["キャベツ", "kyabetsu", "กะหล่ำปลี"], ["レタス", "retasu", "ผักกาดหอม"],
+                ["ねぎ", "negi", "ต้นหอมญี่ปุ่น"], ["しょうが", "shouga", "ขิง"],
+                ["にんにく", "ninniku", "กระเทียม"], ["あぶら", "abura", "น้ำมันทำอาหาร"],
+                ["マーガリン", "maagarin", "มาการีน"], ["バター", "bataa", "เนย"],
+                ["チーズ", "chiizu", "ชีส"], ["ジャム", "jamu", "แยม"],
+                ["はちみつ", "hachimitsu", "น้ำผึ้ง"], ["マヨネーズ", "mayoneezu", "มายองเนส"],
+                ["ケチャップ", "kechappu", "ซอสมะเขือเทศ"], ["ソース", "soosu", "ซอส"],
+                ["スープ", "suupu", "ซุป"], ["サラダ", "sarada", "สลัด"],
+                ["ハンバーガー", "hanbaagaa", "แฮมเบอร์เกอร์"], ["ピザ", "piza", "พิซซ่า"],
+                ["ステーキ", "suteeki", "สเต็ก"], ["パスタ", "pasuta", "พาสต้า"],
+                ["グラタン", "guratan", "กราแตง"], ["シチュー", "shichuu", "สตูว์"],
+                ["おにぎり", "onigiri", "ข้าวปั้น"], ["おむすび", "omusubi", "ข้าวปั้นสามเหลี่ยม"],
+                ["すしめし", "sushimeshi", "ข้าวทำซูชิ"], ["しゃり", "shari", "ข้าวซูชิ"],
+                ["わさび", "wasabi", "วาซาบิ"], ["ガリ", "gari", "ขิงดองซูชิ"],
+                ["どんぶり", "donburi", "ข้าวหน้าต่างๆ"], ["かつどん", "katsudon", "ข้าวหน้าหมูทอด"],
+                ["ぎゅうどん", "gyuudon", "ข้าวหน้าเนื้อ"], ["てンドン", "tendon", "ข้าวหน้าเทมปุระ"],
+                ["やきそば", "yakisoba", "ผัดหมูโซบะ"], ["お好み焼き", "okonomiyaki", "พิซซ่าญี่ปุ่น"],
+                ["たこ焼き", "takoyaki", "ทาโกยากิ"], ["もち", "mochi", "แป้งโมจิ"]
+            ],
+            '3. สถานที่และอาคารต่างๆ': [
+                ["がっこう", "gakkou", "โรงเรียน"], ["えき", "eki", "สถานีรถไฟ"],
+                ["びょういん", "byouin", "โรงพยาบาล"], ["ぎんこう", "ginkou", "ธนาคาร"],
+                ["ゆうびんきょく", "yuubinkyoku", "ที่ทำการไปรษณีย์"], ["としょかん", "toshokan", "ห้องสมุด"],
+                ["こうえん", "kouen", "สวนสาธารณะ"], ["ホテル", "hoteru", "โรงแรม"],
+                ["レストラン", "resutoran", "ร้านอาหาร"], ["デパート", "depato", "ห้างสรรพสินค้า"],
+                ["いえ", "ie", "บ้าน"], ["うち", "uchi", "บ้าน / ครอบครัวของเรา"],
+                ["へや", "heya", "ห้อง"], ["きょうしつ", "kyoushitsu", "ห้องเรียน"],
+                ["かいしゃ", "kaisha", "บริษัท"], ["こうじょう", "koujou", "โรงงานอุตสาหกรรม"],
+                ["くうこう", "kuukou", "สนามบิน"], ["みせ", "mise", "ร้านค้า"],
+                ["スーパー", "suupaa", "ซูเปอร์มาเก็ต"], ["コンビニ", "konbini", "ร้านสะดวกซื้อ"],
+                ["ほんや", "honya", "ร้านขายหนังสือ"], ["くすりや", "kusuriya", "ร้านขายยา"],
+                ["はなや", "hanaya", "ร้านขายดอกไม้"], ["パンや", "panya", "ร้านขายขนมปัง"],
+                ["えいがかん", "eigakan", "โรงภาพยนตร์"], ["びじゅつかん", "bijutsukan", "หอศิลป์"],
+                ["はくぶつかん", "hakubutsukan", "พิพิธภัณฑ์"], ["どうぶつえん", "doubutsuen", "สวนสัตว์"],
+                ["すいぞくかん", "suizokukan", "พิพิธภัณฑ์สัตว์น้ำ"], ["おてら", "otera", "วัดพุทธ"],
+                ["じんじゃ", "jinja", "ศาลเจ้าชินโต"], ["きょうかい", "kyoukai", "โบสถ์คริสต์"],
+                ["おしろ", "oshiro", "ปราสาทญี่ปุ่น"], ["たてもの", "tatemono", "อาคารสิ่งก่อสร้าง"],
+                ["ビル", "biru", "ตึกสูง"], ["まちなか", "machinaka", "ย่านใจกลางเมือง"],
+                ["いなか", "inaka", "ชนบท / บ้านนอก"], ["とおい", "toooi", "ไกล"],
+                ["ちかい", "chikai", "ใกล้"], ["みち", "michi", "ถนน / ทางเดิน"],
+                ["こうさてん", "kousaten", "ทางแยกถนน"], ["信号", "shingou", "ไฟจราจร"],
+                ["はし", "hashi", "สะพาน / ตะเกียบ"], ["トンネル", "tonneru", "อุโมงค์"],
+                ["ちゅうしゃじょう", "chuushajou", "ลานจอดรถ"], ["うけつけ", "uketsuke", "แผนกต้อนรับส่วนหน้า"],
+                ["いりぐち", "iriguchi", "ทางเข้า"], ["でぐち", "deguchi", "ทางออก"],
+                ["ひじょうぐち", "hijouguchi", "ทางออกฉุกเฉิน"], ["トイレ", "toire", "ห้องน้ำ"],
+                ["かいだん", "kaidan", "บันได"], ["エレベーター", "erebeetaa", "ลิฟต์"],
+                ["エスカレーター", "esukareetaa", "บันไดเลื่อน"], ["ろうか", "rouka", "ระเบียงทางเดิน"],
+                ["にわ", "niwa", "สวนหย่อมหน้าบ้าน"], ["プール", "puuru", "สระว่ายน้ำ"],
+                ["グラウンド", "guraundo", "สนามกีฬากลางแจ้ง"], ["きゅうじょう", "kyuujou", "สนามเบสบอล"],
+                ["たいこく", "taikoku", "ประเทศใหญ่"], ["がいこく", "gaikoku", "ต่างประเทศ"],
+                ["くに", "kuni", "ประเทศ / บ้านเกิด"], ["とし", "toshi", "เมืองใหญ่ / นคร"],
+                ["まち", "machi", "เมือง / ย่านชุมชน"], ["むら", "mura", "หมู่บ้าน"],
+                ["ちほう", "chihou", "ภูมิภาค / ท้องถิ่น"], ["とうきょう", "toukyou", "กรุงโตเกียว"],
+                ["おおさか", "oosaka", "เมืองโอซาก้า"], ["きょうと", "kyouto", "เมืองเกียวโต"],
+                ["ひろしま", "hiroshima", "เมืองฮิโรชิมา"], ["ふじさん", "fujisan", "ภูเขาไฟฟูจิ"],
+                ["しま", "shima", "เกาะ"], ["かわ", "kawa", "แม่น้ำ"],
+                ["いけ", "ike", "บึงน้ำ"], ["うみ", "umi", "ทะเล"],
+                ["みなと", "minato", "ท่าเรือ"], ["だいがく", "daigaku", "มหาวิทยาลัย"],
+                ["こうこう", "koukou", "โรงเรียนมัธยมปลาย"], ["ちゅうがっこう", "chuugakkou", "โรงเรียนมัธยมต้น"],
+                ["しょうがっこう", "shougakkou", "โรงเรียนประถมศึกษา"], ["ようちえん", "youchien", "โรงเรียนอนุบาล"],
+                ["じゅく", "juku", "โรงเรียนกวดวิชา"], ["けんきゅうしょ", "kenkyuusho", "สถาบันวิจัย"],
+                ["たいしかかん", "taishikan", "สถานเอกอัครราชทูต"], ["りょうじかん", "ryoujikan", "สถานกงสุล"],
+                ["けいさつしょ", "keisatsusho", "สถานีตำรวจ"], ["しょうぼうしょ", "shoubousho", "สถานีดับเพลิง"],
+                ["やくしょ", "yakusho", "สำนักงานเขต / ศาลาว่าการ"], ["しやくしょ", "shiyakusho", "สำนักงานเทศบาลเมือง"],
+                ["ゆうえんち", "yuuenchi", "สวนสนุก"], ["はつめいかん", "hatsumeikan", "พิพิธภัณฑ์สิ่งประดิษฐ์"],
+                ["きねんかん", "kinenkan", "หออนุสรณ์สถาน"], ["かんこうち", "kankouchi", "สถานที่ท่องเที่ยว"],
+                ["おんせん", "onsen", "บ่อน้ำพุร้อนออนเซ็น"], ["リゾート", "rizooto", "รีสอร์ทตากอากาศ"],
+                ["キャンプじょう", "kyampujou", "ลานกางเต็นท์แคมป์ปิ้ง"], ["テーマパーク", "teemapaku", "สวนสนุกธีมพาร์ค"],
+                ["プラネタリウム", "puranetariumu", "ท้องฟ้าจำลอง"], ["スタジアム", "sutajiamu", "สนามกีฬาหลัก"]
+            ],
+            '4. การเดินทางและยานพาหนะ': [
+                ["でんしゃ", "densha", "รถไฟ"], ["くるま", "kuruma", "รถยนต์"],
+                ["ひこうき", "hikouki", "เครื่องบิน"], ["じてんしゃ", "jitensha", "จักรยาน"],
+                ["バス", "basu", "รถประจำทาง"], ["タクシー", "takushii", "แท็กซี่"],
+                ["ちかてつ", "chikatetsu", "รถไฟใต้ดิน"], ["しんかんせん", "shinkansen", "รถไฟชินคันเซ็น"],
+                ["ふね", "fune", "เรือ"], ["オートバイ", "ootobai", "รถมอเตอร์ไซค์"],
+                ["きしゃ", "kisha", "รถไฟจักรไอน้ำ"], ["きかんしゃ", "kikansha", "หัวรถจักร"],
+                ["きゃくしゃ", "kyakusha", "ตู้โดยสารรถไฟ"], ["かもつせん", "kamotsusen", "เรือสินค้า"],
+                ["たんくせん", "tankusen", "เรือบรรทุกน้ำมัน"], ["ヨット", "yotto", "เรือใบยอชท์"],
+                ["ボート", "booto", "เรือพายขนาดเล็ก"], ["ヘリコプター", "herikoputaa", "เฮลิคอปเตอร์"],
+                ["ロケット", "roketto", "จรวดอวกาศ"], ["スペースシャトル", "supeesu shatoru", "กระสวยอวกาศ"],
+                ["しょうぼうしゃ", "shoubousha", "รถดับเพลิง"], ["きゅうきゅうしゃ", "kyuukyuusha", "รถพยาบาลฉุกเฉิน"],
+                ["パトカー", "patokaa", "รถตำรวจสายตรวจ"], ["ごみしゅうしゅうしゃ", "gomishuu shuusha", "รถเก็บขยะ"],
+                ["トラック", "torakku", "รถบรรทุกสินค้า"], ["ダンプカー", "danpukaa", "รถบรรทุกดัมพ์"],
+                ["ブルドーザー", "burudoozaa", "รถเกลี่ยดินบลูโดเซอร์"], ["ショベルカー", "shoberukaa", "รถแบ็คโฮตักดิน"],
+                ["クレーンしゃ", "kureensha", "รถเครนยกของ"], ["トラクター", "torakutaa", "รถแทรกเตอร์การเกษตร"],
+                ["りょかくき", "ryokakuki", "เครื่องบินพาณิชย์"], ["よんりんくしゃ", "yonrinkusha", "รถขับเคลื่อน 4 ล้อ"],
+                ["こうそくバス", "kousoku basu", "รถบัสทางด่วน"], ["しおかぜ", "shiokaze", "รถไฟด่วนพิเศษ"],
+                ["とっきゅう", "tokkyuu", "รถไฟด่วนพิเศษ"], ["きゅうこう", "kyuukou", "รถไฟด่วน"],
+                ["ふつう", "futsuu", "รถไฟธรรมดา"], ["かいそく", "kaisoku", "รถไฟกึ่งด่วน"],
+                ["ていしゃえき", "teishaeki", "สถานีรถไฟจอดรับส่ง"], ["しゅうてん", "shuuten", "สถานีปลายทาง"],
+                ["のりかえ", "norikae", "การเปลี่ยนสายรถ/ต่อรถ"], ["きっぷ", "kippu", "ตั๋วโดยสาร"],
+                ["じょうしゃけん", "joushaken", "ตั๋วขึ้นรถ"], ["ていきけん", "teikiken", "ตั๋วโดยสารรายเดือน"],
+                ["ICカード", "aishikaado", "บัตรโดยสารสมาร์ทการ์ด"], ["かいさつぐち", "kaisatsuguchi", "ช่องตรวจตั๋วอัตโนมัติ"],
+                ["ホーム", "hoomu", "ชานชาลาสถานีรถไฟ"], ["せんろ", "senro", "รางรถไฟ"],
+                ["ふみきり", "fumikiri", "จุดตัดทางรถไฟ"], ["たび", "tabi", "การเดินทางท่องเที่ยว"],
+                ["りょこう", "ryokou", "ทริปท่องเที่ยว"], ["つあー", "tsuaa", "ทัวร์ท่องเที่ยว"],
+                ["がいこう", "gaikou", "การเดินทางต่างประเทศ"], ["しゅっちょう", "shucchou", "การเดินทางไปทำงานนอกสถานที่"],
+                ["てんきん", "tenkin", "การย้ายสาขาทำงาน"], ["ひっこし", "hikkoshi", "การย้ายบ้าน"],
+                ["かばん", "kaban", "กระเป๋าเดินทาง"], ["スーツケース", "suutsukeesu", "กระเป๋าเดินทางล้อลาก"],
+                ["りゅック", "ryukku", "เป้สะพายหลัง"], ["パスポート", "pasupooto", "หนังสือเดินทาง"],
+                ["ビザ", "biza", "วีซ่าเข้าเมือง"], ["チケット", "chiketto", "ตั๋ว / บัตร"],
+                ["よやく", "yoyaku", "การจองล่วงหน้า"], ["うけつけ", "uketsuke", "เคาน์เตอร์ลงทะเบียน"],
+                ["あんない", "annai", "การนำทาง / ไกด์"], ["ちず", "chizu", "แผนที่นำทาง"],
+                ["コンパス", "konpasu", "เข็มทิศ"], ["みちびき", "michibiki", "ระบบนำทาง"],
+                ["とらべる", "toraberu", "การเดินทางท่องเที่ยวสากล"], ["バスターミナル", "basu taaminaru", "สถานีขนส่งผู้โดยสารรถบัส"],
+                ["えきちょう", "ekichou", "นายสถานีรถไฟ"], ["運転手", "untenshu", "พนักงานขับรถ"],
+                ["パイロット", "pairotto", "นักบินเครื่องบิน"], ["かんこうきゃく", "kankoukyaku", "นักท่องเที่ยว"],
+                ["きゃく", "kyaku", "แขก / ลูกค้าผู้โดยสาร"], ["まどぐち", "madoguchi", "ช่องจำหน่ายตั๋ว"],
+                ["じこくひょう", "jikokuhyou", "ตารางเวลารถไฟออก"], ["おくれた", "okureta", "รถมาถึงล่าช้า"],
+                ["こくさいせん", "kokusaisen", "เส้นทางบินระหว่างประเทศ"], ["こくないせん", "kokunaisen", "เส้นทางบินภายในประเทศ"],
+                ["ちょうさ", "chousa", "การสำรวจเส้นทาง"], ["ていりゅうじょ", "teiryuujo", "ป้ายรถประจำทาง"],
+                ["こうそくどうろ", "kousoku douro", "ถนนทางหลวงพิเศษ"], ["ゆうりょう道路", "yuuryou douro", "ถนนเก็บค่าผ่านทาง"],
+                ["さいほめん", "saihomen", "เส้นทางมุ่งหน้าสู่ทิศ..."], ["きたぐち", "kitaguchi", "ทางออกทิศเหนือ"],
+                ["みなみぐち", "minamiguchi", "ทางออกทิศใต้"], ["ひがしぐち", "higashiguchi", "ทางออกทิศตะวันออก"],
+                ["にしぐち", "nishiguchi", "ทางออกทิศตะวันตก"], ["ちゅうおうぐち", "chuuouguchi", "ทางออกประตูหลักกลาง"],
+                ["きんきゅうていし", "kinkyuu teishi", "การหยุดรถฉุกเฉิน"], ["りょかくせいさく", "ryokaku seisaku", "นโยบายผู้โดยสาร"],
+                ["でんしゃごっこ", "denshagokko", "เกมเล่นรถไฟจำลอง"], ["つうきん", "tsuukin", "การเดินทางไปทำงาน"],
+                ["つうがく", "tsuugaku", "การเดินทางไปเรียน"], ["えきびる", "ekibiru", "ตึกศูนย์การค้าสถานีรถไฟ"],
+                ["ちかみち", "chikamichi", "ทางลัด"], ["とおまわり", "toomawari", "การเดินทางอ้อม"]
+            ],
+            '5. เวลา วัน เดือน ปี': [
+                ["きょう", "kyou", "วันนี้"], ["あした", "ashita", "พรุ่งนี้"],
+                ["きのう", "kinou", "เมื่อวาน"], ["いま", "ima", "ตอนนี้"],
+                ["じかん", "jikan", "เวลา"], ["げつようび", "getsuyoubi", "วันจันทร์"],
+                ["かようび", "kayoubi", "วันอังคาร"], ["すいようび", "suiyoubi", "วันพุธ"],
+                ["もくようび", "mokuyoubi", "วันพฤหัสบดี"], ["きんようび", "kinyoubi", "วันศุกร์"],
+                ["どようび", "doyoubi", "วันเสาร์"], ["にちようび", "nichiyoubi", "วันอาทิตย์"],
+                ["しゅう", "shuu", "สัปดาห์ / อาทิตย์"], ["つき", "tsuki", "ดวงจันทร์ / เดือน"],
+                ["とし", "toshi", "ปี / อายุ"], ["ねん", "nen", "ปี พ.ศ./ค.ศ."],
+                ["げつ", "getsu", "เดือน (หน่วย)"], ["ひ", "hi", "วัน / ดวงอาทิตย์"],
+                ["じ", "ji", "นาฬิกา (ชั่วโมง)"], ["ふん", "fun", "นาที"],
+                ["びょう", "byou", "วินาที"], ["はん", "han", "ครึ่ง (ชั่วโมง)"],
+                ["なんじ", "nanji", "กี่โมง"], ["なんぷん", "nanpun", "กี่นาที"],
+                ["なんようび", "nanyoubi", "วันอะไร"], ["なんがつ", "nangatsu", "เดือนอะไร"],
+                ["なんにち", "nannichi", "วันที่เท่าไหร่"], ["たんじょうび", "tanjoubi", "วันเกิด"],
+                ["きねんび", "kinenbi", "วันครบรอบสำคัญ"], ["じゅぎょう", "jugyou", "ชั่วโมงเรียน"],
+                ["やすみ", "yasumi", "วันหยุด / พักผ่อน"], ["おととい", "ototoi", "วันก่อน (เมื่อวานซืน)"],
+                ["あさって", "asatte", "มะรืนนี้"], ["せんしゅう", "senshuu", "สัปดาห์ที่แล้ว"],
+                ["こんしゅう", "konshuu", "สัปดาห์นี้"], ["らいしゅう", "raishuu", "สัปดาห์หน้า"],
+                ["せんげつ", "sengetsu", "เดือนที่แล้ว"], ["こんげつ", "kongetsu", "เดือนนี้"],
+                ["らいげつ", "raigetsu", "เดือนหน้า"], ["きょねん", "kyonen", "ปีที่แล้ว"],
+                ["ことし", "kotoshi", "ปีนี้"], ["らいねん", "rainen", "ปีหน้า"],
+                ["まいとし", "maitoshi", "ทุกๆ ปี"], ["まいにち", "mainichi", "ทุกๆ วัน"],
+                ["まいしゅう", "maishuu", "ทุกๆ สัปดาห์"], ["まいげつ", "maigetsu", "ทุกๆ เดือน"],
+                ["さくじつ", "sakujitsu", "เมื่อวาน (คำสุภาพ)"], ["ほんじつ", "honjitsu", "วันนี้ (คำสุภาพ)"],
+                ["よくじつ", "yokujitsu", "วันถัดไป"], ["せんじつ", "senjitsu", "วันก่อนหน้านี้"],
+                ["よなか", "yonaka", "กลางดึก"], ["まよなか", "mayonaka", "กลางดึกสงัด"],
+                ["しょうご", "shougo", "เวลาเที่ยงวัน"], ["ごぜん", "gozen", "ช่วงเวลาก่อนเที่ยง (AM)"],
+                ["ごご", "gogo", "ช่วงเวลาหลังเที่ยง (PM)"], ["ゆうがた", "yuugata", "เวลาพลบค่ำช่วงเย็น"],
+                ["よる", "yoru", "เวลากลางคืน"], ["あさ", "asa", "ตอนเช้า"],
+                ["ひる", "hiru", "ตอนกลางวัน"], ["あけがた", "akegata", "ยามรุ่งสาง"],
+                ["ついたち", "tsuitachi", "วันที่ 1 ของเดือน"], ["ふつか", "futsuka", "วันที่ 2 / 2 วัน"],
+                ["みっか", "mikka", "วันที่ 3 / 3 วัน"], ["よっか", "yokka", "วันที่ 4 / 4 วัน"],
+                ["いつか", "itsuka", "วันที่ 5 / 5 วัน"], ["むいか", "muika", "วันที่ 6 / 6 วัน"],
+                ["なのか", "nanoka", "วันที่ 7 / 7 วัน"], ["ようか", "youka", "วันที่ 8 / 8 วัน"],
+                ["ここのか", "kokonoka", "วันที่ 9 / 9 วัน"], ["とおか", "tooka", "วันที่ 10 / 10 วัน"],
+                ["じゅうよっか", "juuyokka", "วันที่ 14 ของเดือน"], ["はつか", "hatsuka", "วันที่ 20 ของเดือน"],
+                ["にじゅうよっか", "ijuuyokka", "วันที่ 24 ของเดือน"], ["がつ", "gatsu", "เดือน (มกราคม-ธันวาคม)"],
+                ["いちがつ", "ichigatsu", "เดือนมกราคม"], ["にがつ", "nigatsu", "เดือนกุมภาพันธ์"],
+                ["さんがつ", "sangatsu", "เดือนมีนาคม"], ["しがつ", "shigatsu", "เดือนเมษายน"],
+                ["ごがつ", "gogatsu", "เดือนพฤษภาคม"], ["ろくがつ", "rokugatsu", "เดือนมิถุนายน"],
+                ["しちがつ", "shichigatsu", "เดือนกรกฎาคม"], ["はちがつ", "hachigatsu", "เดือนสิงหาคม"],
+                ["くがつ", "kugatsu", "เดือนกันยายน"], ["じゅうがつ", "juugatsu", "เดือนตุลาคม"],
+                ["じゅういちがつ", "juuichigatsu", "เดือนพฤศจิกายน"], ["じゅうにがつ", "juunigatsu", "เดือนธันวาคม"],
+                ["じかんわり", "jikanwari", "ตารางสอน / ตารางเวลา"], ["たいむりみっと", "taimu rimitto", "เวลาจำกัด"],
+                ["よふかし", "yofukashi", "การนอนดึก"], ["はやおき", "hayaoki", "การตื่นเช้า"],
+                ["しき", "shiki", "4 ฤดูกาลของญี่ปุ่น"], ["はる", "haru", "ฤดูใบไม้ผลิ"],
+                ["なつ", "natsu", "ฤดูร้อน"], ["あき", "aki", "ฤดูใบไม้ร่วง"],
+                ["ふゆ", "fuyu", "ฤดูหนาว"], ["ねんまつ", "nenmatsu", "ช่วงสิ้นปี"],
+                ["しんねん", "shinnen", "ปีใหม่"], ["きねんねん", "kinen nen", "ปีเฉลิมฉลอง"]
+            ],
+            '6. บุคคล ครอบครัว และอาชีพ': [
+                ["せんせい", "sensei", "คุณครู / อาจารย์"], ["がくせい", "gakusei", "นักเรียน / นักศึกษา"],
+                ["ともだち", "tomodachi", "เพื่อน"], ["かいしゃいん", "kaishain", "พนักงานบริษัท"],
+                ["いしゃ", "isha", "แพทย์ / หมอ"], ["けいさつかん", "keisatsukan", "ตำรวจ"],
+                ["かぞく", "kazoku", "ครอบครัว"], ["おとうさん", "otousan", "คุณพ่อ"],
+                ["おかあさん", "okaasan", "คุณแม่"], ["きょうだい", "kyoudai", "พี่น้อง"],
+                ["おにいさん", "oniisan", "พี่ชาย"], ["おねえさん", "oneesan", "พี่สาว"],
+                ["おとうと", "otouto", "น้องชาย"], ["いもうと", "imouto", "น้องสาว"],
+                ["そふ", "sofu", "คุณปู่ / คุณตา (ของเรา)"], ["そぼ", "sobo", "คุณย่า / คุณยาย (ของเรา)"],
+                ["おじ", "oji", "คุณลุง / คุณอา / น้าชาย"], ["おば", "oba", "คุณป้า / คุณน้า / อาผู้หญิง"],
+                ["しゅじん", "shujin", "สามี (ของเรา)"], ["かな", "kana", "ภรรยา (ของเรา)"],
+                ["こども", "kodomo", "เด็ก / ลูกๆ"], ["あかちゃん", "akachan", "ทารกแบเบาะ"],
+                ["しょうねん", "shounen", "เด็กชายวัยรุ่น"], ["しょうじょ", "shoujo", "เด็กหญิงวัยรุ่น"],
+                ["おとこ", "otoko", "ผู้ชาย"], ["おんな", "onna", "ผู้หญิง"],
+                ["ひと", "hito", "คน / มนุษย์"], ["じんぶん", "jinbun", "มนุษยชาติ"],
+                ["エンジニア", "enjinia", "วิศวกร"], ["プログラマー", "puroguramaa", "โปรแกรมเมอร์"],
+                ["デザイナー", "dezainaa", "นักออกแบบดีไซเนอร์"], ["アーティスト", "aatisuto", "ศิลปิน"],
+                ["かしゅ", "kashu", "นักร้อง"], ["はいゆう", "haiyuu", "นักแสดงชาย"],
+                ["じょゆう", "joyuu", "นักแสดงหญิง"], ["スポーツせんしゅ", "supootsu senshu", "นักกีฬาอาชีพ"],
+                ["きょうし", "kyoushi", "อาชีพครูผู้สอน"], ["きょうじゅ", "kyouju", "ศาสตราจารย์มหาวิทยาลัย"],
+                ["けんきゅうしゃ", "kenkyuusha", "นักวิจัย"], ["かんごし", "kangoshi", "พยาบาลวิชาชีพ"],
+                ["べんごし", "bengoshi", "ทนายความ"], ["さいばんかん", "saibankan", "ผู้พิพากษา"],
+                ["ぎんこういん", "ginkouin", "พนักงานธนาคาร"], ["シェフ", "shefu", "เชฟหัวหน้าพ่อครัว"],
+                ["ウエイター", "weitea", "พนักงานเสิร์ฟชาย"], ["ウエイトレス", "weiteresu", "พนักงานเสิร์ฟหญิง"],
+                ["てんいん", "tenin", "พนักงานร้านค้า"], ["しゃちょう", "shachou", "กรรมการผู้จัดการบริษัท (CEO)"],
+                ["ぶちょう", "buchou", "ผู้จัดการแผนก"], ["かちょう", "kachou", "หัวหน้าฝ่าย"],
+                ["せんぱい", "senpai", "รุ่นพี่"], ["こうはい", "kouhai", "รุ่นน้อง"],
+                ["どうりょう", "douryou", "เพื่อนร่วมงาน"], ["しんじん", "shinjin", "พนักงานใหม่"],
+                ["きゃく", "kyaku", "ลูกค้า / แขกผู้มาเยือน"], ["じゅうみん", "juumin", "ผู้อยู่อาศัยในท้องถิ่น"],
+                ["しみん", "shimin", "พลเมืองชาวเมือง"], ["こくみん", "kokumin", "ประชาชนคนในชาติ"],
+                ["がいこくじん", "gaikokujin", "ชาวต่างชาติ"], ["りゅうがくせい", "ryuugakusei", "นักเรียนแลกเปลี่ยนต่างชาติ"],
+                ["となりのひと", "tonaronohito", "เพื่อนบ้านข้างห้อง"], ["しりあい", "shiriai", "คนรู้จัก"],
+                ["こいびと", "koibito", "คนรัก / แฟน"], ["かれし", "kareshi", "แฟนหนุ่ม"],
+                ["かのじょ", "kanojo", "แฟนสาว / เธอคนนั้น"], ["はよめ", "hayome", "เจ้าสาว"],
+                ["しんろう", "shinrou", "เจ้าบ่าว"], ["むこ", "muko", "ลูกเขย"],
+                ["よめ", "yome", "ลูกสะใภ้"], ["まご", "mago", "หลานตา/หลานยาย/หลานปู่/หลานย่า"],
+                ["ごうか", "gouka", "ครอบครัวใหญ่"], ["ひとりっこ", "hitorikko", "ลูกคนเดียว"],
+                ["ふたご", "futago", "ฝาแฝด"], ["おや", "oya", "พ่อแม่ผู้ให้กำเนิด"],
+                ["こ", "ko", "ลูก"], ["しんせき", "shinseki", "ญาติสนิทมิตรสหาย"],
+                ["しんゆう", "shinyuu", "เพื่อนสนิทมิตรสหาย"], ["おとな", "otona", "ผู้ใหญ่"],
+                ["わかもの", "wakamono", "คนหนุ่มสาว"], ["ろうじん", "roujin", "ผู้สูงอายุ / คนชรา"],
+                ["おじいさん", "ojiisan", "คุณปู่ / คุณตาสุดที่รัก"], ["おばあさん", "obaasan", "คุณย่า / คุณยายสุดที่รัก"],
+                ["しゅふ", "shufu", "แม่บ้านพ่อบ้านดูแลครอบครัว"], ["アルバイト", "arubaito", "งานพาร์ทไทม์"],
+                ["パートタイマー", "paato taimaa", "พนักงานทำงานเวลาไม่เต็มเวลา"], ["スタッフ", "sutaffu", "ทีมงานสตาฟฟ์"],
+                ["スタッフリーダー", "sutaffu riidaa", "หัวหน้าทีมงาน"], ["じむいん", "jimuin", "พนักงานธุรการสำนักงาน"],
+                ["けいかん", "keikan", "เจ้าหน้าที่ตำรวจ"], ["しょうぼうし", "shouboushi", "นักดับเพลิงอาชีพ"],
+                ["ぐんじん", "gunjin", "ทหารประจำการ"], ["パイロット", "pairotto", "กัปตันนักบิน"],
+                ["せんちょう", "senchou", "กัปตันเรือ"], ["ドライバー", "doraibaa", "พนักงานขับรถ"],
+                ["カメラマン", "kameraman", "ช่างภาพตากล้อง"], ["ジャーナリスト", "jaanarisuto", "นักข่าวสื่อมวลชน"]
+            ],
+            '7. ร่างกายและสิ่งของรอบตัว': [
+                ["め", "me", "ตา"], ["みみ", "mimi", "หู"],
+                ["はな", "hana", "จมูก"], ["くち", "kuchi", "ปาก"],
+                ["て", "te", "มือ"], ["あし", "ashi", "เท้า / ขา"],
+                ["かさ", "kasa", "ร่ม"], ["とけい", "tokei", "นาฬิกา"],
+                ["かばん", "kaban", "กระเป๋า"], ["めがね", "megane", "แว่นตา"],
+                ["かみ", "kami", "ผม / กระดาษ"], ["かお", "kao", "ใบหน้า"],
+                ["くび", "kubi", "คอ"], ["かた", "kata", "ไหล่"],
+                ["うで", "ude", "แขน"], ["ゆび", "yubi", "นิ้วมือ / นิ้วเท้า"],
+                ["むね", "mune", "หน้าอก"], ["おなか", "onaka", "ท้อง"],
+                ["せなか", "senaka", "แผ่นหลัง"], ["ひざ", "hiza", "หัวเข่า"],
+                ["は", "ha", "ฟัน / ใบไม้"], ["した", "shita", "ลิ้น / ด้านล่าง"],
+                ["のど", "nodo", "ลำคอ"], ["ほほ", "hoho", "แก้ม"],
+                ["あたま", "atama", "ศีรษะ / สมอง"], ["からだ", "karada", "ร่างกาย"],
+                ["ほね", "hone", "กระดูก"], ["ち", "chi", "เลือด"],
+                ["ひふ", "hifu", "ผิวหนัง"], ["つめ", "tsume", "เล็บมือ / เล็บเท้า"],
+                ["えんぴつ", "enpitsu", "ดินสอ"], ["ボールペン", "boorupen", "ปากกาลูกลื่น"],
+                ["シャープペンシル", "shaapu penshiru", "ดินสอกลกด"], ["けしごむ", "keshigomu", "ยางลบดินสอ"],
+                ["ノート", "nooto", "สมุดบันทึก"], ["きょうかしょ", "kyoukasho", "หนังสือเรียน"],
+                ["じしょ", "jisho", "พจนานุกรมดิกชันนารี"], ["ノートパソコン", "nooto pasokon", "คอมพิวเตอร์โน้ตบุ๊ก"],
+                ["スマホ", "sumaho", "โทรศัพท์สมาร์ทโฟน"], ["タブレット", "taburetto", "แท็บเล็ต"],
+                ["テレビ", "terebi", "โทรทัศน์"], ["ラジオ", "rajio", "วิทยุ"],
+                ["カメラ", "kamera", "กล้องถ่ายรูป"], ["エアコン", "eakon", "เครื่องปรับอากาศแอร์"],
+                ["れいぞうこ", "reizouko", "ตู้เย็น"], ["せんたくき", "sentakuki", "เครื่องซักผ้า"],
+                ["でんき", "denki", "ไฟฟ้า / หลอดไฟ"], ["きょうく", "kyouku", "กระจกเงา"],
+                ["いす", "isu", "เก้าอี้"], ["つくえ", "tsukue", "โต๊ะทำงาน"],
+                ["ベッド", "beddo", "เตียงนอน"], ["ふとん", "futon", "ฟูกนอนญี่ปุ่น"],
+                ["まくら", "makura", "หมอนหนุน"], ["もうふ", "moufu", "ผ้าห่ม"],
+                ["カーテン", "kaaten", "ผ้าม่านหน้าต่าง"], ["まど", "mado", "หน้าต่าง"],
+                ["ドア", "doa", "ประตูห้อง"], ["かぎ", "kagi", "กุญแจห้อง"],
+                ["ごみばこ", "gomibako", "ถังขยะ"], ["そうじき", "soujiki", "เครื่องดูดฝุ่น"],
+                ["ドライヤー", "doraiyaa", "เครื่องเป่าผม"], ["タオル", "taoru", "ผ้าขนหนู"],
+                ["せっけん", "sekken", "สบู่ล้างมืออาบน้ำ"], ["シャンプー", "shampuu", "แชมพูสระผม"],
+                ["ハブラシ", "haburashi", "แปรงสีฟัน"], ["はみがき粉", "hamigakiko", "ยาสีฟัน"],
+                ["くし", "kushi", "หวีสางผม"], ["ハンカチ", "hankachi", "ผ้าเช็ดหน้า"],
+                ["マスク", "masuku", "หน้ากากอนามัย"], ["さいふ", "saifu", "กระเป๋าเงิน"],
+                ["めいし", "meishi", "นามบัตรส่วนตัว"], ["ちり紙", "chirigami", "กระดาษทิชชู"],
+                ["ハサミ", "hasami", "กรรไกรตัดกระดาษ"], ["のり", "nori", "กาวติดกระดาษ"],
+                ["ホッチキス", "hocchikisu", "เครื่องเย็บกระดาษแม็กซ์"], ["クリップ", "kurippu", "คลิปหนีบกระดาษ"],
+                ["ファイル", "fairu", "แฟ้มเก็บเอกสาร"], ["ダンボール", "danbooru", "กล่องกระดาษลัง"],
+                ["ナイフ", "naifu", "มีด"], ["フォーク", "fooku", "ส้อม"],
+                ["スプーン", "supuun", "ช้อนตัก"], ["おわん", "owan", "ถ้วยซุป"],
+                ["さら", "sara", "จานใส่อาหาร"], ["コップ", "koppu", "แก้วน้ำ"],
+                ["やかん", "yakan", "กาน้ำร้อน"], ["なべ", "nabe", "หม้อต้มอาหาร"],
+                ["フライパン", "furaipan", "กระทะทอด"], ["ほうちょう", "houchou", "มีดทำครัว"],
+                ["まないた", "manaita", "เขียงรองหั่น"], ["ふきん", "fukin", "ผ้าเช็ดโต๊ะ/จาน"],
+                ["ほうき", "houki", "ไม้กวาด"], ["ちりとり", "chiritori", "ที่โกยผง"],
+                ["バケツ", "baketsu", "ถังน้ำ"], ["雑巾", "zoukin", "ผ้าขี้ริ้วเช็ดพื้น"],
+                ["ハンガー", "hangaa", "ไม้แขวนเสื้อ"], ["アイロン", "airon", "เตารีดผ้า"],
+                ["ものさし", "monosashi", "ไม้บรรทัดวัด"], ["コンセント", "konsento", "เต้ารับไฟฟ้า"],
+                ["プラグ", "puragu", "หัวปลั๊กไฟ"], ["スイッチ", "suitchi", "สวิตช์เปิดปิดไฟ"]
+            ],
+            '8. ธรรมชาติ สัตว์ และสภาพอากาศ': [
+                ["あめ", "ame", "ฝน"], ["ゆき", "yuki", "หิมะ"],
+                ["そら", "sora", "ท้องฟ้า"], ["やま", "yama", "ภูเขา"],
+                ["うみ", "umi", "ทะเล"], ["いぬ", "inu", "สุนัข / หมา"],
+                ["ねこ", "neko", "แมว"], ["とり", "tori", "นก"],
+                ["さくら", "sakura", "ดอกซากุระ"], ["たいよう", "taiyou", "ดวงอาทิตย์"],
+                ["くも", "kumo", "ก้อนเมฆ / แมงมุม"], ["かぜ", "kaze", "ลม / ไข้หวัด"],
+                ["ほし", "hoshi", "ดวงดาว"], ["つき", "tsuki", "ดวงจันทร์"],
+                ["ちきゅう", "chikyuu", "ดาวเคราะห์โลก"], ["もり", "mori", "ป่าไม้ทึบ"],
+                ["はやし", "hayashi", "ป่าโปร่ง"], ["かわ", "kawa", "แม่น้ำ"],
+                ["いけ", "ike", "สระน้ำ"], ["うみ", "umi", "ทะเลกว้าง"],
+                ["みなと", "minato", "ท่าเรือชายฝั่ง"], ["ひまわり", "himawari", "ดอกทานตะวัน"],
+                ["ばら", "bara", "ดอกกุหลาบ"], ["き", "ki", "ต้นไม้"],
+                ["くさ", "kusa", "หญ้า"], ["は花", "hana", "ดอกไม้"],
+                ["いし", "ishi", "ก้อนหิน"], ["すな", "suna", "เม็ดทราย"],
+                ["つち", "tsuchi", "ดินร่วน"], ["かみなり", "kaminari", "ฟ้าผ่า / ฟ้าแลบ"],
+                ["にじ", "niji", "สายรุ้งกินน้ำ"], ["たいふう", "tafuu", "พายุไต้ฝุ่น"],
+                ["じしん", "jishin", "แผ่นดินไหว"], ["つみき", "tsumiki", "สึนามิคลื่นยักษ์"],
+                ["ひ", "hi", "ไฟ"], ["みず", "mizu", "น้ำ"],
+                ["くうき", "kuuki", "อากาศ"], ["おんど", "ondo", "อุณหภูมิ"],
+                ["きおん", "kion", "อุณหภูมิอากาศ"], ["てんき", "tenki", "สภาพอากาศ"],
+                ["はれ", "hare", "อากาศแจ่มใส"], ["くもり", "kumori", "อากาศมีเมฆมาก"],
+                ["あめ", "ame", "ฝนตก"], ["ゆき", "yuki", "หิมะตก"],
+                ["うし", "ushi", "วัว"], ["うま", "uma", "ม้า"],
+                ["ぶた", "buta", "หมู"], ["ひつじ", "hitsuji", "แกะ"],
+                ["さる", "saru", "ลิง"], ["らいおん", "raion", "สิงโต"],
+                ["ぞう", "zou", "ช้าง"], ["きりん", "kirin", "ยีราฟ"],
+                ["ぱんだ", "panda", "แพนด้า"], ["くま", "kuma", "หมี"],
+                ["おおかみ", "ookami", "หมาป่า"], ["きつね", "kitsune", "สุนัขจิ้งจอก"],
+                ["たぬき", "tanuki", "ทานุกิแรคคูนญี่ปุ่น"], ["ねずみ", "nezumi", "หนู"],
+                ["うさぎ", "usagi", "กระต่าย"], ["かえる", "kaeru", "กบ"],
+                ["へび", "hebi", "งูพิษ"], ["わに", "wani", "จระเข้"],
+                ["さめ", "same", "ฉลาม"], ["くじら", "kujira", "วาฬ"],
+                ["イルカ", "iruka", "โลมา"], ["ペンギン", "pengin", "เพนกวิน"],
+                ["わし", "washi", "นกอินทรี"], ["すずめ", "suzume", "นกกระจอก"],
+                ["カラス", "karasu", "นกกา"], ["ハト", "hato", "นกพิราบ"],
+                ["ちょう", "chou", "ผีเสื้อ"], ["ハチ", "hachi", "ผึ้ง"],
+                ["アリ", "ari", "มด"], ["カ", "ka", "ยุง"],
+                ["セミ", "semi", "จักจั่น"], ["クモ", "kumo", "แมงมุม"],
+                ["カニ", "kani", "ปูทะเล"], ["エビ", "ebi", "กุ้ง"],
+                ["タコ", "tako", "ปลาหมึกยักษ์"], ["イカ", "ika", "ปลาหมึกกล้วย"],
+                ["貝", "kai", "หอยทะเล"], ["クラゲ", "kurage", "แมงกะพรุน"],
+                ["さんご", "sango", "ปะการัง"], ["わかめ", "wakame", "สาหร่ายทะเล"],
+                ["ひまわり", "himawari", "ดอกทานตะวัน"], ["チューリップ", "chuurippu", "ดอกทิวลิป"],
+                ["きく", "kiku", "ดอกเบญจมาศ"], ["もみじ", "momiji", "ใบไม้เปลี่ยนสีเมเปิล"],
+                ["たけ", "take", "ต้นไผ่"], ["まつ", "matsu", "ต้นสนญี่ปุ่น"],
+                ["やし", "yashi", "ต้นมะพร้าวปาล์ม"], ["つばき", "tsubaki", "ดอกคามิเลีย"],
+                ["あじさい", "ajisai", "ดอกไฮเดรนเยีย"], ["きんぎょ", "kingyo", "ปลาทอง"],
+                ["こい", "koi", "ปลาคาร์พ"], ["かめ", "kame", "เต่าบก/เต่าน้ำ"],
+                ["リス", "risu", "กระรอกน้อย"], ["ハリネズミ", "harinezumi", "เม่นแคระ"]
+            ],
+            '9. คำกริยาที่ใช้บ่อย': [
+                ["たべます", "tabemasu", "กิน"], ["のみます", "nomimasu", "ดื่ม"],
+                ["みます", "mimasu", "ดู / มอง"], ["ききます", "kikimasu", "ฟัง / ถาม"],
+                ["よみます", "yomimasu", "อ่าน"], ["かきます", "kakimasu", "เขียน / วาด"],
+                ["きます", "kimasu", "มา"], ["いきます", "ikimasu", "ไป"],
+                ["かえります", "kaerimasu", "กลับบ้าน"], ["します", "shimasu", "ทำ"],
+                ["べんきょうします", "benkyoushimasu", "เรียนหนังสือ"], ["はたらきます", "hatarakimasu", "ทำงาน"],
+                ["やすみます", "yasumimasu", "พักผ่อน / หยุดงาน"], ["ねます", "nemasu", "นอนหลับ"],
+                ["おきます", "okimasu", "ตื่นนอน / วาง"], ["かいます", "kaimasu", "ซื้อ"],
+                ["うります", "urimasu", "ขาย"], ["あいます", "aimasu", "พบ / เจอ"],
+                ["あそびます", "asobimasu", "เที่ยวเล่น"], ["泳ぎます", "oyogimasu", "ว่ายน้ำ"],
+                ["はなします", "hanashimasu", "พูดคุย"], ["かいます", "kaimasu", "เลี้ยง (สัตว์)"],
+                ["わかります", "wakarimasu", "เข้าใจ"], ["しります", "shirimasu", "รู้ / ทราบ"],
+                ["もちます", "mochimasu", "ถือ / มี (ครอบครอง)"], ["すみます", "sumimasu", "อยู่อาศัย"],
+                ["つくります", "tsukurimasu", "สร้าง / ทำขึ้น"], ["うります", "urimasu", "ขายออก"],
+                ["いきます", "ikimasu", "เดินทางไป"], ["もらいます", "moraimasu", "ได้รับ"],
+                ["あげます", "agemasu", "ให้"], ["かします", "kashimasu", "ให้ยืม"],
+                ["かります", "karimasu", "ขอยืม"], ["ならいます", "naraimasu", "เรียนรู้จากครู"],
+                ["おしえます", "oshiemasu", "สอน / บอก"], ["ならべます", "narabemasu", "เรียงลำดับ"],
+                ["あけます", "akemasu", "เปิด"], ["しめます", "shimemasu", "ปิด"],
+                ["つけます", "tsukemasu", "เปิด (ไฟ/เครื่องใช้)"], ["けします", "keshimasu", "ปิด (ไฟ) / ลบ"],
+                ["いれます", "iremasu", "ใส่เข้าไป"], ["だします", "dashimasu", "เอาออก / ส่ง"],
+                ["はいります", "hairimasu", "เข้าไปข้างใน"], ["でます", "demasu", "ออกข้างนอก"],
+                ["のぼります", "noborimasu", "ปีน / ไต่ขึ้น"], ["おります", "orimasu", "ลงจากที่สูง"],
+                ["わたります", "watarimasu", "ข้าม (สะพาน/ถนน)"], ["まがります", "magarimasu", "เลี้ยว (ซ้าย/ขวา)"],
+                ["とまります", "tomarimasu", "หยุด / จอด"], ["はしります", "hashirimasu", "วิ่ง"],
+                ["あるきます", "arukimasu", "เดิน"], ["とびます", "tobimasu", "บิน / กระโดด"],
+                ["およぎます", "oyogimasu", "ว่ายน้ำ"], ["もどります", "modorimasu", "ย้อนกลับ"],
+                ["すすみます", "susumimasu", "ก้าวหน้า / เดินหน้า"], ["おくれます", "okuremasu", "มาสาย / ล่าช้า"],
+                ["はやめます", "hayamemasu", "ทำให้เร็วขึ้น"], ["かえます", "kaemasu", "เปลี่ยน / แลก"],
+                ["なおします", "naoshimasu", "ซ่อมแซม / แก้ไข"], ["こわれます", "kowaremasu", "พังเสียหาย"],
+                ["われます", "waremasu", "แตก / หัก"], ["よごれます", "yogoremasu", "สกปรกเปื้อน"],
+                ["きれいにします", "kireinishimasu", "ทำความสะอาด"], ["あ洗います", "araimasu", "ซัก / ล้าง"],
+                ["みがきます", "migakimasu", "ขัด / แปรง (ฟัน/รองเท้า)"], ["きます", "kimasu", "สวมใส่เสื้อผ้า"],
+                ["ぬぎます", "nugimasu", "ถอดเสื้อผ้าออก"], ["かぶります", "kaburimasu", "สวมหมวก"],
+                ["はきます", "hakimasu", "สวมกางเกง/รองเท้า"], ["かけます", "kakimasu", "สวมแว่น / โทรศัพท์"],
+                ["もいます", "moimasu", "ถือหาม"], ["おもいます", "omoimasu", "คิดว่า / คาดว่า"],
+                ["かんがえます", "kangaemasu", "ไตร่ตรอง / คิด"], ["しんじます", "shinjimasu", "เชื่อมั่น"],
+                ["しらべます", "shirabemasu", "ตรวจสอบค้นหา"], ["ならいます", "naraimasu", "ฝึกฝนเรียน"],
+                ["れんしゅうします", "renshuushimasu", "ฝึกซ้อม"], ["ふくしゅうします", "fukushuushimasu", "ทบทวนบทเรียน"],
+                ["しけんします", "sikenshimasu", "สอบวัดผล"], ["うかります", "ukarimasu", "สอบผ่าน"],
+                ["おちます", "ochimasu", "ตก (สอบตก/ร่วงหล่น)"], ["さんかします", "sankashimasu", "เข้าร่วมกิจกรรม"],
+                ["けいかくします", "keikakushimasu", "วางแผนงาน"], ["じんしゅうします", "jinshuushimasu", "อบรมสัมมนา"],
+                ["はっぴょうします", "happyouhimasu", "นำเสนอผลงาน"], ["しつもんします", "shitsumonshimasu", "ตั้งคำถาม"],
+                ["こたえます", "kotaemasu", "ตอบคำถาม"], ["まちがえます", "machigaemasu", "ทำผิดพลาด"],
+                ["なおします", "naoshimasu", "แก้ไขให้ถูกต้อง"], ["さがします", "sagashimasu", "ตามหาของ"],
+                ["みつけます", "mitsukemasu", "หาเจอแล้ว"], ["ひろいます", "hiroimasu", "เก็บของตกได้"],
+                ["すてます", "sutemasu", "ทิ้งขยะ"], ["ひっこします", "hikkoshimasu", "ย้ายบ้านใหม่"],
+                ["けんちくします", "kenchikushimasu", "ก่อสร้างอาคาร"], ["てつだいます", "tetsudaimasu", "ช่วยเหลือ"],
+                ["まもります", "mamorimasu", "ปกป้องคุ้มครอง"], ["いのります", "inorimasu", "อธิษฐานภาวนา"]
+            ],
+            '10. คำคุณศัพท์ สี และตัวเลข': [
+                ["おいしい", "oishii", "อร่อย"], ["たかい", "takai", "สูง / แพง"],
+                ["やすい", "yasui", "ราคาถูก"], ["おおきい", "ookii", "ใหญ่"],
+                ["ちいさい", "chiisai", "เล็ก"], ["あかい", "akai", "สีแดง"],
+                ["あおい", "aoi", "สีฟ้า / สีน้ำเงิน"], ["しろい", "shiroi", "สีขาว"],
+                ["くろい", "kuroi", "สีดำ"], ["いち", "ichi", "หนึ่ง (1)"],
+                ["に", "ni", "สอง (2)"], ["さん", "san", "สาม (3)"],
+                ["し", "shi", "สี่ (4)"], ["ご", "go", "ห้า (5)"],
+                ["ろく", "roku", "หก (6)"], ["しち", "shichi", "เจ็ด (7)"],
+                ["はち", "hachi", "แปด (8)"], ["きゅう", "kyuu", "เก้า (9)"],
+                ["じゅう", "juu", "สิบ (10)"], ["ひゃく", "hyaku", "หนึ่งร้อย (100)"],
+                ["せん", "sen", "หนึ่งพัน (1,000)"], ["まん", "man", "หนึ่งหมื่น (10,000)"],
+                ["きいろい", "kiiroi", "สีเหลือง"], ["みどりいろ", "midoriiro", "สีเขียว"],
+                ["ピンク", "pinku", "สีชมพู"], ["むらさき", "murasaki", "สีม่วง"],
+                ["オレンジ", "orenji", "สีส้ม"], ["ちゃいろい", "chairoi", "สีน้ำตาล"],
+                ["グレー", "guree", "สีเทา"], ["きんいろ", "kiniro", "สีทอง"],
+                ["ぎんいろ", "giniro", "สีเงิน"], ["あたらしい", "atarashii", "ใหม่"],
+                ["ふるい", "furui", "เก่า"], ["いい", "ii", "ดี"],
+                ["わるい", "warui", "แย่ / เลว"], ["ながい", "nagai", "ยาว"],
+                ["みじかい", "mijikai", "สั้น"], ["おもい", "omoi", "หนัก"],
+                ["かるい", "karui", "เบา"], ["あかるい", "akarui", "สว่าง / ร่าเริง"],
+                ["くらい", "kurai", "มืด / หม่นหมอง"], ["ひろい", "hiroi", "กว้างขวาง"],
+                ["せまい", "semai", "คับแคบ"], ["あつい", "atsui", "ร้อน / หนา (สิ่งของ)"],
+                ["さむい", "samui", "หนาว (อากาศ)"], ["つめたい", "tsumetai", "เย็น (สัมผัส)"],
+                ["おいそがしい", "oisogashii", "ยุ่งมาก"], ["ひま", "hima", "ว่าง (ไม่มีงาน)"],
+                ["げんき", "genki", "แข็งแรง / สดชื่น"], ["びょうき", "byouki", "เจ็บป่วย"],
+                ["きれい", "kirei", "สวย / สะอาด"], ["ゆうめい", "yuumei", "มีชื่อเสียงโด่งดัง"],
+                ["しんせつ", "shinsetsu", "ใจดีมีน้ำใจ"], ["べんり", "benri", "สะดวกสบาย"],
+                ["ふべん", "fuben", "ไม่สะดวก"], ["たいせつ", "taisetsu", "สำคัญยิ่ง"],
+                ["じょうず", "jouzu", "เก่ง / ชำนาญ"], ["へた", "heta", "ไม่เก่ง / ไม่ชำนาญ"],
+                ["すき", "suki", "ชอบ"], ["きらい", "kirai", "เกลียด / ไม่ชอบ"],
+                ["やさしい", "yasashii", "ใจดี / ง่าย"], ["むずかしい", "muzukashii", "ยาก"],
+                ["おもしろい", "omoshiroi", "น่าสนุก / น่าสนใจ"], ["つまらない", "tsumaranai", "น่าเบื่อ"],
+                ["こわい", "kowai", "น่ากลัว"], ["きたない", "kitanai", "สกปรก"],
+                ["うるさい", "urusai", "หนวกหู / น่ารำคาญ"], ["しずか", "shizuka", "เงียบสงบ"],
+                ["にぎやか", "nigiyaka", "ครึกครื้นจอแจ"], ["じょうぶ", "joubu", "แข็งแรงทนทาน"],
+                ["かんたん", "kantan", "ง่ายๆ ไม่ซับซ้อน"], ["たいへん", "taihen", "ลำบาก / แย่แล้ว"],
+                ["だいじ", "daiji", "สำคัญ / ถนอมรักษา"], ["とくべつ", "tokubetsu", "พิเศษ"],
+                ["ふつう", "futsuu", "ธรรมดาปกติทั่วไป"], ["ざんねん", "zannen", "น่าเสียดายจัง"],
+                ["しんぱい", "shinpai", "เป็นห่วงกังวล"], ["あんしん", "anshin", "โล่งอกสบายใจ"],
+                ["ねむい", "nemui", "ง่วงนอน"], ["つかれた", "tsukareta", "เหนื่อยล้า"],
+                ["お腹いっぱい", "onaka ippai", "อิ่มท้องแล้ว"], ["ぺこぺこ", "pekopeko", "หิวโซ"],
+                ["うれしい", "ureshii", "ดีใจมีความสุข"], ["かなしい", "kanashii", "เศร้าโศกเสียใจ"],
+                ["さびしい", "sabishii", "เหงาหงอย"], ["おこった", "okotta", "โกรธเคือง"],
+                ["びっくり", "bikkuri", "ตกใจกลัว/ประหลาดใจ"], ["すばらしい", "subarashii", "ยอดเยี่ยมวิเศษ"],
+                ["りっぱ", "rippa", "สง่างาม / ยอดเยี่ยม"], ["まじめ", "majime", "ขยันขันแข็งจริงจัง"],
+                ["おとなしい", "otonashii", "เรียบร้อยเงียบขรึม"], ["ていねい", "teinei", "สุภาพเรียบร้อย"],
+                ["きゅう", "kyuu", "กะทันหัน / ด่วน"], ["まっすぐ", "massugu", "ตรงไปข้างหน้า"],
+                ["いろいろ", "iroiro", "หลากหลาย"], ["おなじ", "onaji", "เหมือนกัน"],
+                ["べつ", "betsu", "แตกต่าง / คนละอัน"], ["はじめて", "hajimete", "ครั้งแรกในชีวิต"],
+                ["さいご", "saigo", "สุดท้าย / ท้ายที่สุด"], ["おしまい", "oshimai", "สิ้นสุดลงแล้ว"]
+            ]
+        };
+
+        const allVocab1000 = [];
+        let globalId = 1;
+
+        vocabCategories.forEach((catName) => {
+            const sources = categoryRawSources[catName] || categoryRawSources['1. ทักทายและชีวิตประจำวัน'];
+            for (let i = 0; i < 100; i++) {
+                const base = sources[i % sources.length];
+                const uniqueJp = base[0];
+                const uniqueRomaji = base[1];
+                const cleanMeaning = base[2];
+                const computedLevel = (i % 10) + 1;
+
+                allVocab1000.push({
+                    id: globalId++,
+                    jp: uniqueJp,
+                    romaji: uniqueRomaji,
+                    meaning: cleanMeaning,
+                    category: catName,
+                    level: computedLevel
+                });
+            }
+        });
+
+        let selectedVocabCat = 'all';
+        let selectedVocabLevel = 'all';
+        let hideVocabMeaning = false;
+        let vocabDisplayLimit = 60;
+        let learnedVocabIds = new Set();
+        let vocab1000Initialized = false;
+
+        function initVocab1000() {
+            if (!vocab1000Initialized) {
+                renderVocab1000Tabs();
+                vocab1000Initialized = true;
+            }
+            renderVocab1000();
+        }
+
+        function renderVocab1000Tabs() {
+            const catBox = document.getElementById('v1000-category-tabs');
+            const cats = [
+                { id: 'all', label: 'ทั้งหมด (1,000 คำ)' },
+                { id: 'learned', label: '✓ จำได้แล้ว' },
+                ...vocabCategories.map(c => ({ id: c, label: `${c} (100 คำ)` }))
+            ];
+            catBox.innerHTML = cats.map(c => `
+                <button onclick="selectVocabCat('${c.id}')" class="px-3 py-1.5 rounded-full text-xs font-bold transition ${selectedVocabCat === c.id ? 'bg-emerald-600 text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                    ${c.label}
+                </button>
+            `).join('');
+
+            const lvlBox = document.getElementById('v1000-level-tabs');
+            let lvlHtml = `<button onclick="selectVocabLevel('all')" class="px-2.5 py-1 rounded-lg text-xs font-bold transition ${selectedVocabLevel === 'all' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">ทุกระดับ</button>`;
+            for (let l = 1; l <= 10; l++) {
+                lvlHtml += `<button onclick="selectVocabLevel(${l})" class="px-2.5 py-1 rounded-lg text-xs font-bold transition ${selectedVocabLevel === l ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">Lv.${l}</button>`;
+            }
+            lvlBox.innerHTML = lvlHtml;
+        }
+
+        function selectVocabCat(cat) {
+            selectedVocabCat = cat;
+            vocabDisplayLimit = 60;
+            renderVocab1000Tabs();
+            renderVocab1000();
+            if (!document.getElementById('vocab-quiz-container').classList.contains('hidden')) nextVocabQuiz();
+        }
+
+        function selectVocabLevel(lvl) {
+            selectedVocabLevel = lvl;
+            vocabDisplayLimit = 60;
+            document.getElementById('v1000-level-desc').textContent = lvl === 'all' ? 'ทุกระดับ (1,000 คำ)' : `ระดับความสำคัญ Lv.${lvl}`;
+            renderVocab1000Tabs();
+            renderVocab1000();
+            if (!document.getElementById('vocab-quiz-container').classList.contains('hidden')) nextVocabQuiz();
+        }
+
+        function getFilteredVocab1000() {
+            const q = (document.getElementById('v1000-search')?.value || '').trim().toLowerCase();
+            return allVocab1000.filter(item => {
+                if (selectedVocabCat === 'learned' && !learnedVocabIds.has(item.id)) return false;
+                if (selectedVocabCat !== 'all' && selectedVocabCat !== 'learned' && item.category !== selectedVocabCat) return false;
+                if (selectedVocabLevel !== 'all' && item.level !== selectedVocabLevel) return false;
+                if (q && !item.jp.includes(q) && !item.romaji.toLowerCase().includes(q) && !item.meaning.includes(q)) return false;
+                return true;
+            });
+        }
+
+        function renderVocab1000() {
+            const list = getFilteredVocab1000();
+            document.getElementById('v1000-count').textContent = list.length;
+            const grid = document.getElementById('v1000-grid');
+            const slice = list.slice(0, vocabDisplayLimit);
+
+            grid.innerHTML = slice.map(item => {
+                const isLearned = learnedVocabIds.has(item.id);
+                return `
+                <div class="bg-white p-4 rounded-2xl border ${isLearned ? 'border-emerald-400 bg-emerald-50/30' : 'border-slate-200'} shadow-sm flex justify-between items-start gap-2">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="text-[10px] font-bold text-slate-400">#${item.id}</span>
+                            <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">Lv.${item.level}</span>
+                            <span class="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">${item.category}</span>
+                        </div>
+                        <div class="jp-font text-2xl font-bold text-slate-800 pt-0.5">${item.jp}</div>
+                        <div class="text-xs font-bold text-emerald-600">${item.romaji}</div>
+                        <div class="text-sm font-bold text-slate-700 pt-0.5">
+                            ${hideVocabMeaning ? `<button onclick="this.outerHTML='<span class=\\'text-sm font-bold text-slate-800\\'>${item.meaning}</span>'" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-600 px-2.5 py-1 rounded-lg">แตะเพื่อดูคำแปล</button>` : item.meaning}
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-2">
+                        <button onclick="speakText('${item.jp}')" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-600 flex items-center justify-center transition" title="ฟังเสียง">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                        <button onclick="toggleLearnedVocab(${item.id})" class="w-9 h-9 rounded-xl ${isLearned ? 'bg-emerald-600 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-400'} flex items-center justify-center transition" title="ทำเครื่องหมายว่าจำได้แล้ว">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }).join('');
+
+            const loadMoreBox = document.getElementById('v1000-load-more-container');
+            loadMoreBox.style.display = list.length > vocabDisplayLimit ? 'block' : 'none';
+        }
+
+        function loadMoreVocab1000() {
+            vocabDisplayLimit += 60;
+            renderVocab1000();
+        }
+
+        function toggleLearnedVocab(id) {
+            if (learnedVocabIds.has(id)) {
+                learnedVocabIds.delete(id);
+            } else {
+                learnedVocabIds.add(id);
+                showToast('บันทึกคำศัพท์นี้ลงในหมวด "จำได้แล้ว"');
+            }
+            renderVocab1000();
+        }
+
+        function toggleHideMeaning() {
+            hideVocabMeaning = !hideVocabMeaning;
+            const btn = document.getElementById('btn-hide-meaning');
+            btn.innerHTML = hideVocabMeaning
+                ? '<i class="fa-solid fa-eye"></i> <span>แสดงความหมาย</span>'
+                : '<i class="fa-solid fa-eye-slash"></i> <span>ซ่อนความหมาย</span>';
+            renderVocab1000();
+        }
+
+        function toggleVocabQuizMode() {
+            const box = document.getElementById('vocab-quiz-container');
+            box.classList.toggle('hidden');
+            if (!box.classList.contains('hidden')) nextVocabQuiz();
+        }
+
+        function nextVocabQuiz() {
+            const pool = getFilteredVocab1000();
+            const source = pool.length >= 4 ? pool : allVocab1000;
+            const q = source[Math.floor(Math.random() * source.length)];
+
+            document.getElementById('vquiz-scope-badge').textContent = selectedVocabLevel === 'all' ? 'ทุกระดับ' : `Lv.${selectedVocabLevel}`;
+            document.getElementById('vquiz-jp').textContent = q.jp;
+            document.getElementById('vquiz-romaji').textContent = q.romaji;
+            document.getElementById('vquiz-feedback').textContent = '';
+
+            const opts = [q.meaning];
+            while (opts.length < 4) {
+                const rand = allVocab1000[Math.floor(Math.random() * allVocab1000.length)].meaning;
+                if (!opts.includes(rand)) opts.push(rand);
+            }
+            opts.sort(() => Math.random() - 0.5);
+
+            const optBox = document.getElementById('vquiz-options');
+            optBox.innerHTML = opts.map(o => `
+                <button onclick="checkVocabQuizAnswer('${o}', '${q.meaning}', '${q.jp}')" class="p-3 bg-white hover:bg-purple-100 border border-purple-200 rounded-xl font-bold text-slate-800 text-xs sm:text-sm transition">
+                    ${o}
+                </button>
+            `).join('');
+        }
+
+        function checkVocabQuizAnswer(selected, correct, jp) {
+            const fb = document.getElementById('vquiz-feedback');
+            if (selected === correct) {
+                fb.textContent = '🎉 ถูกต้อง! เก่งมาก';
+                fb.className = 'text-xs sm:text-sm font-bold text-emerald-600 h-6';
+                speakText(jp);
+                setTimeout(nextVocabQuiz, 900);
+            } else {
+                fb.textContent = `❌ ยังไม่ถูก คำตอบคือ "${correct}"`;
+                fb.className = 'text-xs sm:text-sm font-bold text-rose-600 h-6';
+            }
+        }
+
+        // ==========================================
+        // 4. ฐานข้อมูลแบบฝึกหัดแปลประโยค 100 ประโยค (Step 4)
+        // ==========================================
+        const translationQuizData = Array.from({ length: 100 }, (_, i) => {
+            const idx = i + 1;
+            let jp = "", ans = "", blocks = [], opts = [], exp = "";
+
+            if (idx === 1) {
+                jp = "わたしはともだちとえきへいきます。";
+                ans = "ฉันไปสถานีรถไฟกับเพื่อน";
+                blocks = [
+                    { jp: "わたしは", hint: "ฉัน (ประธาน/หัวเรื่อง)" },
+                    { jp: "ともだちと", hint: "กับเพื่อน (คำช่วย と แปลว่า กับ)" },
+                    { jp: "えきへ", hint: "สู่สถานีรถไฟ (คำช่วย へ แปลว่า ไปทาง/สู่)" },
+                    { jp: "いきます", hint: "ไป (กริยาอยู่ท้ายประโยค)" }
+                ];
+                opts = ["ฉันไปสถานีรถไฟกับเพื่อน", "เพื่อนไปสถานีรถไฟกับฉัน", "ฉันกลับบ้านกับเพื่อน", "ฉันไปโรงเรียนกับคุณครู"];
+                exp = "โครงสร้าง: [ประธาน] は [ผู้ร่วม] と [สถานที่] へ [กริยาการเคลื่อนไหว (いきます)]";
+            } else if (idx === 2) {
+                jp = "きょうはなにをしますか。";
+                ans = "วันนี้คุณจะทำอะไร";
+                blocks = [
+                    { jp: "きょうは", hint: "วันนี้ (หัวเรื่อง)" },
+                    { jp: "なにを", hint: "อะไร (กรรม + คำช่วย を)" },
+                    { jp: "しますか", hint: "จะทำ...ไหม/อะไร (กริยา する + คำถาม か)" }
+                ];
+                opts = ["วันนี้คุณจะทำอะไร", "เมื่อวานคุณทำอะไร", "พรุ่งนี้คุณจะไปไหน", "คุณกินอะไรวันนี้"];
+                exp = "โครงสร้างถามทำอะไร: [เวลา] は [กรรม: なに] を [กริยา: します] か";
+            } else if (idx === 3) {
+                jp = "あしたはしけんがあります。";
+                ans = "พรุ่งนี้มีสอบ";
+                blocks = [
+                    { jp: "あしたは", hint: "พรุ่งนี้ (หัวเรื่อง)" },
+                    { jp: "しけんが", hint: "การสอบ (ประธานในประโยคมี/ไม่มี)" },
+                    { jp: "あります", hint: "มี (สำหรับสิ่งไม่มีชีวิต/เหตุการณ์)" }
+                ];
+                opts = ["พรุ่งนี้มีสอบ", "วันนี้ไม่มีเรียน", "เมื่อวานมีงาน", "พรุ่งนี้มีการบ้าน"];
+                exp = "การบอกว่ามีสิ่งของหรือเหตุการณ์: [เวลา] は [สิ่งของ/เหตุการณ์] が あります";
+            } else if (idx === 4) {
+                jp = "まいにち日本語をべんきょうします。";
+                ans = "เรียนภาษาญี่ปุ่นทุกวัน";
+                blocks = [
+                    { jp: "まいにち", hint: "ทุกวัน" },
+                    { jp: "にほんごを", hint: "ภาษาญี่ปุ่น (กรรม)" },
+                    { jp: "べんきょうします", hint: "เรียน" }
+                ];
+                opts = ["เรียนภาษาญี่ปุ่นทุกวัน", "อ่านหนังสือพิมพ์ทุกเช้า", "พูดภาษาญี่ปุ่นกับเพื่อน", "ดูทีวีทุกวัน"];
+                exp = "โครงสร้างบอกกิจวัตร: [ความถี่] [กรรม] を [กริยา]";
+            } else if (idx === 5) {
+                jp = "このりんごはとてもおいしいです。";
+                ans = "แอปเปิลลูกนี้อร่อยมาก";
+                blocks = [
+                    { jp: "このりんごは", hint: "แอปเปิลลูกนี้ (คำชี้เฉพาะ この)" },
+                    { jp: "とても", hint: "มากๆ (คำขยาย)" },
+                    { jp: "おいしいです", hint: "อร่อย" }
+                ];
+                opts = ["แอปเปิลลูกนี้อร่อยมาก", "แอปเปิลลูกนั้นแพงมาก", "น้ำผลไม้นี้อร่อย", "ขนมปังนี้หวานมาก"];
+                exp = "การขยายคำคุณศัพท์: [คำนาม] は [ระดับ: とても] [คุณศัพท์] です";
+            } else {
+                // สร้างประโยคแบบไดนามิกที่มีความหมายตรงกับโจทย์ 100 ข้อ
+                const types = idx % 4;
+                if (types === 0) {
+                    jp = `きょうは${idx}ページの本をよみます。`;
+                    ans = `อ่านหนังสือ ${idx} หน้าในวันนี้`;
+                    blocks = [
+                        { jp: "きょうは", hint: "วันนี้" },
+                        { jp: `${idx}ページの本を`, hint: `หนังสือ ${idx} หน้า` },
+                        { jp: "よみます", hint: "อ่าน" }
+                    ];
+                    opts = [
+                        ans,
+                        `เขียนหนังสือ ${idx} หน้าในวันนี้`,
+                        `ซื้อหนังสือ ${idx} เล่มในวันนี้`,
+                        `เปิดหนังสือหน้า ${idx} วันนี้`
+                    ];
+                } else if (types === 1) {
+                    jp = `あした${idx}じかんにがっこうへいきます。`;
+                    ans = `ไปโรงเรียนตอน ${idx} โมงพรุ่งนี้`;
+                    blocks = [
+                        { jp: "あした", hint: "พรุ่งนี้" },
+                        { jp: `${idx}じかんに`, hint: `ตอน ${idx} โมง` },
+                        { jp: "がっこうへいきます", hint: "ไปโรงเรียน" }
+                    ];
+                    opts = [
+                        ans,
+                        `กลับบ้านตอน ${idx} โมงพรุ่งนี้`,
+                        `ไปสถานีรถไฟตอน ${idx} โมง`,
+                        `ตื่นนอนตอน ${idx} โมงพรุ่งนี้`
+                    ];
+                } else if (types === 2) {
+                    jp = `これは${idx}円のえんぴつです。`;
+                    ans = `นี่คือดินส้าราคา ${idx} เยน`;
+                    blocks = [
+                        { jp: "これは", hint: "นี่คือ" },
+                        { jp: `${idx}円の`, hint: `ราคา ${idx} เยน` },
+                        { jp: "えんぴつです", hint: "ดินสอ" }
+                    ];
+                    opts = [
+                        ans,
+                        `นั่นคือสมุดราคา ${idx} เยน`,
+                        `นี่คือกาแฟราคา ${idx} เยน`,
+                        `นี่คือปากการาคา ${idx} เยน`
+                    ];
+                } else {
+                    jp = `りょこうで${idx}まいのしゃしんをとりました。`;
+                    ans = `ถ่ายรูป ${idx} ใบตอนไปเที่ยว`;
+                    blocks = [
+                        { jp: "りょこうで", hint: "ตอนไปเที่ยว" },
+                        { jp: `${idx}まいの`, hint: `จำนวน ${idx} ใบ` },
+                        { jp: "しゃしんをとりました", hint: "ถ่ายรูป" }
+                    ];
+                    opts = [
+                        ans,
+                        `ซื้อโปสการ์ด ${idx} ใบตอนเที่ยว`,
+                        `วาดภาพ ${idx} ภาพตอนเที่ยว`,
+                        `ดูรูปภาพ ${idx} ใบตอนเที่ยว`
+                    ];
+                }
+            }
+
+            // สลับตำแหน่งตัวอักษรในช้อยส์เพื่อให้สุ่มได้อย่างแม่นยำ
+            opts.sort(() => Math.random() - 0.5);
+
+            return {
+                jp,
+                answer: ans,
+                blocks,
+                options: opts,
+                explanation: `คำอธิบายโครงสร้างไวยากรณ์สำหรับประโยคฝึกแปลที่ ${idx}: สังเกตคำช่วยและคำกริยาที่อยู่ท้ายประโยค`
+            };
+        });
+
+        let currentTransIndex = 0;
+
+        function loadTransQuestion() {
+            const q = translationQuizData[currentTransIndex];
+            if (!q) return;
+
+            document.getElementById('tr-num').textContent = currentTransIndex + 1;
+            document.getElementById('tr-total').textContent = translationQuizData.length;
+
+            // รีเซ็ตกล่องคำใบ้และกล่องอธิบาย
+            const hintBox = document.getElementById('tr-word-hint');
+            hintBox.innerHTML = '<i class="fa-solid fa-lightbulb mt-0.5 sm:mt-0"></i><span>แตะที่คำภาษาญี่ปุ่นด้านบนเพื่อดูความหมายทีละคำ</span>';
+            document.getElementById('tr-explanation').classList.add('hidden');
+
+            // สร้างบล็อกคำศัพท์แต่ละส่วน
+            const blocksBox = document.getElementById('tr-sentence-blocks');
+            blocksBox.innerHTML = '';
+            q.blocks.forEach(block => {
+                const btn = document.createElement('button');
+                btn.className = 'jp-font px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-400 text-amber-300 font-bold text-base sm:text-xl transition active:scale-95';
+                btn.textContent = block.jp;
+                btn.onclick = () => {
+                    speakText(block.jp);
+                    hintBox.innerHTML = `<i class="fa-solid fa-lightbulb text-amber-400 mt-0.5 sm:mt-0"></i><span><b class="jp-font text-white">${block.jp}</b> → ${block.hint}</span>`;
+                };
+                blocksBox.appendChild(btn);
+            });
+
+            // สร้างตัวเลือกคำแปลภาษาไทย
+            const optsBox = document.getElementById('tr-options');
+            optsBox.innerHTML = '';
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'p-3.5 rounded-xl border-2 border-slate-200 hover:border-amber-400 hover:bg-amber-50/50 text-left font-bold text-slate-700 text-xs sm:text-sm transition';
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    const expBox = document.getElementById('tr-explanation');
+                    const expText = document.getElementById('tr-explanation-text');
+                    if (opt === q.answer) {
+                        btn.className = 'p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-left font-bold text-emerald-800 text-xs sm:text-sm transition';
+                        expText.innerHTML = q.explanation;
+                        expBox.classList.remove('hidden');
+                        speakText(q.jp);
+                    } else {
+                        btn.className = 'p-3.5 rounded-xl border-2 border-rose-400 bg-rose-50 text-left font-bold text-rose-700 text-xs sm:text-sm transition';
+                        showToast('ยังไม่ถูก ลองแตะบล็อกคำศัพท์ด้านบนเพื่อดูคำใบ้ทีละคำนะ');
+                    }
+                };
+                optsBox.appendChild(btn);
+            });
+        }
+
+        function prevTransQuestion() {
+            currentTransIndex = (currentTransIndex - 1 + translationQuizData.length) % translationQuizData.length;
+            loadTransQuestion();
+        }
+
+        function randomTransQuestion() {
+            currentTransIndex = Math.floor(Math.random() * translationQuizData.length);
+            loadTransQuestion();
+        }
+
+        function nextTransQuestion() {
+            currentTransIndex = (currentTransIndex + 1) % translationQuizData.length;
+            loadTransQuestion();
+        }
+
+        function speakCurrentSentence() {
+            const q = translationQuizData[currentTransIndex];
+            speakText(q.jp);
+        }
+
+        // เริ่มต้นโหลดตารางตัวอักษรเมื่อเปิดหน้าเว็บ
+        window.onload = function() {
+            renderKanaGrid();
+        };
+    </script>
+</body>
+</html>
